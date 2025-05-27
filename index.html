@@ -24,6 +24,22 @@
             height: 100vh;
             position: fixed;
             overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #34495e #2c3e50;
+        }
+
+        #sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #sidebar::-webkit-scrollbar-track {
+            background: #2c3e50;
+        }
+
+        #sidebar::-webkit-scrollbar-thumb {
+            background-color: #34495e;
+            border-radius: 4px;
+            border: 2px solid #2c3e50;
         }
 
         #sidebar h2 {
@@ -40,6 +56,15 @@
         #sidebar ul li {
             margin-bottom: 10px;
         }
+        
+        #sidebar ul ul { /* Style nested lists */
+            margin-left: 20px;
+            list-style: none;
+            padding-left: 0;
+            border-left: 1px solid #34495e;
+            padding-top: 5px;
+            margin-top: 5px;
+        }
 
         #sidebar ul li a {
             color: #ecf0f1;
@@ -48,6 +73,11 @@
             padding: 8px 15px;
             border-radius: 4px;
             transition: background-color 0.3s ease;
+        }
+        
+        #sidebar ul ul li a { /* Style nested links */
+             padding: 6px 15px 6px 25px; /* Indent nested links */
+             font-size: 0.9em;
         }
 
         #sidebar ul li a:hover,
@@ -60,6 +90,27 @@
             margin-left: 290px;
             padding: 30px;
             width: calc(100% - 290px);
+            position: relative;
+        }
+        
+        #lang-switcher {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #lang-switcher span {
+            margin-left: 10px;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+        
+        #lang-switcher span:hover,
+        #lang-switcher span.active-lang {
+            opacity: 1;
         }
 
         .section {
@@ -95,10 +146,13 @@
         h3 {
             color: #16a085;
             margin-top: 25px;
+            margin-bottom: 10px;
         }
         
         h4 {
             color: #27ae60;
+            margin-top: 20px;
+            margin-bottom: 5px;
         }
 
         details {
@@ -115,6 +169,7 @@
             color: #2c3e50;
             font-size: 1.1em;
             outline: none;
+            display: list-item; /* Ensures marker is shown */
         }
         
         details[open] summary {
@@ -125,10 +180,20 @@
         ul {
             list-style: disc;
             margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        ul ul { /* Indent nested lists in content */
+            margin-left: 25px; 
+            list-style: circle;
         }
 
         li {
             margin-bottom: 8px;
+        }
+
+        p {
+            margin: 10px 0;
         }
 
         code {
@@ -148,6 +213,10 @@
         .npc-card summary, .org-card summary {
             font-size: 1.2em;
         }
+        
+        .npc-card div, .org-card .tags { 
+            margin-bottom: 10px;
+        }
 
         .tag {
             display: inline-block;
@@ -164,6 +233,10 @@
         .tag-blue { background-color: #3498db; }
         .tag-purple { background-color: #9b59b6; }
         .tag-grey { background-color: #95a5a6; }
+
+        .lang-ko {
+            display: none; /* Hide Korean by default */
+        }
 
     </style>
 </head>
@@ -200,1068 +273,704 @@
                     <li><a href="#global-npcs" onclick="showSection('global-npcs', this)"> Global NPCs</a></li>
                 </ul>
             </li>
-             <li><a href="#power-systems" onclick="showSection('power-systems', this)">⚡ Power Systems</a></li>
         </ul>
     </div>
 
     <div id="content">
-        
+        <div id="lang-switcher">
+            <span id="lang-en-btn" class="active-lang" onclick="switchLanguage('en')">🇺🇸</span>
+            <span id="lang-ko-btn" onclick="switchLanguage('ko')">🇰🇷</span>
+        </div>
+
         <div id="animarium" class="section">
-            <h1>📖 Animarium - Archive of the Soul</h1>
-            
-            <h3>1. Definition and Acquisition</h3>
-            <ul>
-                <li><strong>Definition:</strong> The Animarium is a personal book every sentient being has, symbolizing 'soul' (Anima) and 'archive' (-rium).</li>
-                <li><strong>Essence:</strong> It records an individual's life and the narratives formed.</li>
-            </ul>
-
-            <h3>2. Rules of the Animarium</h3>
-            <ul>
-                <li><strong>Story Slots:</strong> Limited to 5 permanent story slots.</li>
-                <li><strong>Story Creation:</strong> Significant events or achievements can automatically become 'stories'.</li>
-                <li><strong>Grade Assignment:</strong> Stories get a grade based on world impact.
-                    <ul>
-                        <li>Grading System: Folktale (민담) < Fairy Tale (동화) < Tale (설화) < Epic (서사) < Legend (전설) < Myth (신화).</li>
-                    </ul>
-                </li>
-                <li><strong>Story Enhancement:</strong>
-                    <ul>
-                        <li>Repeated similar experiences strengthen a story.</li>
-                        <li>Enhancement can enrich content, deepen attributes, or raise the grade.</li>
-                        <li>Enhancement conditions vary.</li>
-                    </ul>
-                </li>
-                <li><strong>New Stories & Replacement:</strong>
-                    <ul>
-                        <li>If full, a 6th story requires a choice: keep 5 or replace one.</li>
-                        <li>Unslotted stories are permanently erased.</li>
-                    </ul>
-                </li>
-            </ul>
-
-            <h3>3. Attribution of Story Attributes</h3>
-            <ul>
-                <li><strong>Conceptual Attributes/Powers:</strong> Stories grant conceptual attributes (not direct magic/strength).</li>
-                <li><strong>Scope of Influence:</strong> Affects self, presence, reputation, relationships, fate.</li>
-                <li><strong>Attribute Changes:</strong>
-                    <ul>
-                        <li>Enhancement strengthens or deepens attributes.</li>
-                        <li>Replacement removes old attributes and adds new ones.</li>
-                    </ul>
-                </li>
-                <li><strong>Examples:</strong>
-                    <ul>
-                        <li>"Compassion..." (Fairy Tale) -> 'Compassion' attribute (reduces wariness).</li>
-                        <li>"Endurance..." (Legend) -> 'Perseverance' attribute (enhances mental fortitude).</li>
-                        <li>"Righteous person..." (Epic) -> 'Unyielding Will' & 'Weight of Truth' (conviction, persuasion).</li>
-                        <li>"Sage..." (Myth) -> 'Insight of the Abyss' & 'Mark of Taboo' (insight, but distance/attention).</li>
-                        <li>"First hero..." (Divine Myth) -> 'Symbol of Salvation' & 'Guide of Destiny' (hope symbol, world influence).</li>
-                    </ul>
-                </li>
-            </ul>
-             <h3>4. Story Resonance and Ego Manifestation</h3>
-             <ul>
-                <li>Objects sharing long or significant (Epic+) stories with an owner can develop a faint Ego as narrative energy imprints upon them.</li>
-            </ul>
+            <div class="lang-en">
+                <h1>📖 Animarium - Archive of the Soul</h1>
+                <h3>1. Definition and Acquisition</h3>
+                <ul>
+                    <li><strong>Definition:</strong> The Animarium is a personal book every sentient being has, symbolizing 'soul' (Anima) and 'archive' (-rium).</li>
+                    <li><strong>Essence:</strong> It records an individual's life and the narratives formed.</li>
+                </ul>
+                <h3>2. Rules of the Animarium</h3>
+                <ul>
+                    <li><strong>Story Slots:</strong> Limited to 5 permanent story slots.</li>
+                    <li><strong>Story Creation:</strong> Significant events or achievements can automatically become 'stories'.</li>
+                    <li><strong>Grade Assignment:</strong> Stories get a grade based on world impact.
+                        <ul>
+                            <li>Grading System: Folktale < Fairy Tale < Tale < Epic < Legend < Myth.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Story Enhancement:</strong> Repeated similar experiences strengthen a story, potentially enriching content, deepening attributes, or raising the grade.</li>
+                    <li><strong>New Stories & Replacement:</strong> If full, a 6th story requires a choice: keep 5 or replace one. Unslotted stories are erased.</li>
+                </ul>
+                <h3>3. Attribution of Story Attributes</h3>
+                <ul>
+                    <li><strong>Conceptual Attributes/Powers:</strong> Stories grant conceptual attributes affecting self, presence, reputation, relationships, and fate.</li>
+                    <li><strong>Attribute Changes:</strong> Enhancement strengthens attributes; Replacement removes old and adds new ones.</li>
+                    <li><strong>Examples:</strong> Compassion (Fairy Tale), Perseverance (Legend), Unyielding Will (Epic), Insight of the Abyss (Myth), Symbol of Salvation (Divine Myth).</li>
+                </ul>
+                <h3>4. Story Resonance and Ego Manifestation</h3>
+                <ul>
+                    <li>Objects sharing long or significant (Epic+) stories with an owner can develop a faint Ego as narrative energy imprints upon them.</li>
+                </ul>
+            </div>
+            <div class="lang-ko">
+                <h1>📖 아니마리움 - 영혼의 기록소</h1>
+                <h3>1. 아니마리움의 정의 및 획득</h3>
+                <ul>
+                    <li><strong>정의:</strong> 아니마리움은 모든 지성체가 영혼에 품고 태어나는 개인적인 책입니다. '영혼'을 의미하는 아니마(Anima)와 '장소'를 나타내는 리움(-rium)의 합성어입니다.</li>
+                    <li><strong>본질:</strong> 개인의 삶과 그를 통해 쌓이는 서사를 담는 시스템입니다.</li>
+                </ul>
+                <h3>2. 아니마리움의 규칙</h3>
+                <ul>
+                    <li><strong>이야기 슬롯:</strong> 최대 5개의 이야기만 영구적으로 기록될 수 있습니다.</li>
+                    <li><strong>이야기 생성 및 기록:</strong> 중요한 경험이나 업적은 자동으로 '이야기'로 기록될 수 있습니다.</li>
+                    <li><strong>등급 부여:</strong> 이야기는 중요도와 영향력에 따라 등급이 매겨집니다.
+                        <ul>
+                           <li>등급 체계: 민담 < 동화 < 설화 < 서사 < 전설 < 신화.</li>
+                        </ul>
+                    </li>
+                    <li><strong>이야기 강화:</strong> 유사한 경험을 반복하면 이야기가 강화되어 내용이 풍부해지거나 등급이 상승할 수 있습니다.</li>
+                    <li><strong>새로운 이야기와 교체:</strong> 슬롯이 가득 차면 기존 이야기 중 하나를 새 이야기로 교체하거나, 새 이야기를 포기해야 합니다. 슬롯에 들어가지 못한 이야기는 사라집니다.</li>
+                </ul>
+                <h3>3. 이야기의 속성 부여</h3>
+                <ul>
+                    <li><strong>개념적 속성/힘:</strong> 이야기는 직접적인 힘 대신 개념적 속성(내면, 존재감, 명성, 운명 등)을 부여합니다.</li>
+                    <li><strong>속성 변화:</strong> 강화는 속성을 강하게 하고, 교체는 기존 속성을 없애고 새로운 속성을 부여합니다.</li>
+                    <li><strong>예시:</strong> '온정'(동화급), '인고'(설화급), '불굴의 의지'(서사급), '심연의 통찰'(전설급), '구원의 상징'(신화급).</li>
+                </ul>
+                 <h3>4. 이야기 공명과 자아 발현</h3>
+                 <ul>
+                    <li>소유자와 길거나 중요한(서사급 이상) 이야기를 공유한 물건은, 서사 에너지가 각인되어 희미한 자아를 가질 수 있습니다.</li>
+                </ul>
+            </div>
         </div>
 
         <div id="factions" class="section">
-            <h1>🌍 Factions</h1>
-            <p>Select a specific faction from the sidebar menu to view details.</p>
+             <div class="lang-en">
+                <h1>🌍 Factions</h1>
+                <p>Select a specific faction from the sidebar menu to view details.</p>
+             </div>
+              <div class="lang-ko">
+                <h1>🌍 세력</h1>
+                <p>사이드바 메뉴에서 특정 세력을 선택하여 자세한 내용을 확인하세요.</p>
+             </div>
         </div>
-        
+
         <div id="lumina" class="section">
-            <h1>☀️ Lumina Empire</h1>
-            
-            <h3>1. Empire's Name</h3>
-            <ul>
-                <li><strong>Name:</strong> Lumina Empire. 'Lumina' signifies spreading 'light' (civilization/order) and represents glory and hegemonic power.</li>
-            </ul>
-
-            <h3>2. Social Atmosphere</h3>
-            <ul>
-                <li><strong>Expansionist & Strength-Worshipping:</strong> Values ability over lineage, seeks expansion.</li>
-                <li><strong>Order of Conviction:</strong> Justifies conquest with 'salvation,' 'civilization,' imposing its values, believing it's best for the world.</li>
-            </ul>
-
-            <h3>3. Main Species</h3>
-            <ul>
-                <li><strong>Human Centrism:</strong> Humans are the core and ruling class, based on "The Aurean Guides" doctrine.</li>
-            </ul>
-
-            <h3>4. Values: The Aurean Guides</h3>
-             <ul>
-                <li><strong>Name Meaning:</strong> 'Aurea' (radiant/supreme value) + 'Guides' (human mission to lead others).</li>
-                <li><strong>Core Doctrines:</strong>
-                    <ol>
-                       <li>Humans are Aurea's chosen guides, tasked with leading others.</li>
-                       <li>Aurea's light is order/power; strength establishes order and serves Aurea.</li>
-                       <li>Constant advance and expansion are devotion to Aurea.</li>
-                       <li>The Emperor ("Brightest Star") is sacred, an incarnation of Aurea, with absolute authority.</li>
-                    </ol>
-                </li>
-            </ul>
-
-            <h3>5. Social Structure and Governing Ideology</h3>
-            <ul>
-                <li><strong>Structure:</strong> Medieval feudal society (Emperor, nobles, serfs).</li>
-                <li><strong>Rule of "The Aurean Guides":</strong> Doctrine ingrained in laws, education, culture; a spiritual and governing pillar.</li>
-                <li><strong>Meritocracy:</strong> Limited opportunities for status rise through ability/achievements, especially military.</li>
-            </ul>
-            
-            <h3>6. Lumina Empire Major Power Systems</h3>
-             <details>
-                <summary>Knights (기사)</summary>
-                <p>Knights possess superhuman combat abilities through 'Aura' training.</p>
-                <h4>Aura (오라)</h4>
-                <ul>
-                    <li><strong>Aura Core:</strong> Formed by condensing Mana in the heart, fused with vitality/mental strength; determines potential.</li>
-                    <li><strong>Bodily Circuits:</strong> Aura circulates through microscopic pathways, strengthening the body and increasing Aura capacity.</li>
-                    <li><strong>Aura Shaping:</strong> Precise control of Aura for enhancement, concentration, release, and shaping.</li>
-                </ul>
-                 <h4>Knight Ranks</h4>
-                 <ul>
-                    <li><strong>Aura User / Novice Knight:</strong> Basic body/weapon enhancement.</li>
-                    <li><strong>Aura Expert / Elite Knight:</strong> Precise control, significant enhancement, limited application techniques.</li>
-                    <li><strong>Aura Master / Grand Knight:</strong> Free manipulation, transcendent abilities, special techniques.</li>
-                    <li><strong>Armament:</strong> Heavy armor and destructive weapons enhanced by Aura.</li>
-                </ul>
-                 <h4>Knight Organizations</h4>
-                 <ul>
-                    <li><strong>Knight Orders under Lords:</strong> Local military foundation, loyal to their lords.</li>
-                    <li><strong>Luminous Knights:</strong> Emperor's elite order, superior in all aspects, guards Emperor and enforces his will.</li>
-                </ul>
-            </details>
-             <details>
-                <summary>Wizards (마법사)</summary>
-                <p>Systematically trained mages manipulating 'Mana'.</p>
-                <h4>Magic: Principle and System</h4>
-                <ul>
-                    <li><strong>Mana Sphere:</strong> Formed by condensing Mana in the heart, a reservoir for casting.</li>
-                    <li><strong>Spell Imprinting:</strong> Imprinting 'Spell Formulas' onto the Mana Sphere to define magic.</li>
-                    <li><strong>Floor Levels & Titles:</strong>
-                        <ul>
-                           <li>1st~3rd Floor: Apprentice Mage (Basic learning).</li>
-                           <li>4th~6th Floor: Mage (Stable sphere, complex spells).</li>
-                           <li>7th Floor: Sorcerer (Unique level, original spells).</li>
-                           <li>8th~9th Floor: Archmage (Legendary, battlefield-changing power).</li>
-                        </ul>
-                    </li>
-                </ul>
-                <h4>Wizard Organizations</h4>
-                <ul>
-                    <li><strong>Mage Tower-Centric System:</strong> Magic research/training centered in the capital's Mage Tower, under strict Imperial control.</li>
-                    <li><strong>Hierarchy and Management:</strong> Strict hierarchy based on floor/ability/contribution; elite but supervised group.</li>
-                </ul>
-            </details>
+            <div class="lang-en">
+                <h1>☀️ Lumina Empire</h1>
+                <h3>1. Empire's Name</h3>
+                <ul><li><strong>Name:</strong> Lumina Empire. 'Lumina' signifies spreading 'light' (civilization/order) and represents glory and hegemonic power.</li></ul>
+                <h3>2. Social Atmosphere</h3>
+                <ul><li><strong>Expansionist & Strength-Worshipping:</strong> Values ability over lineage, seeks expansion.</li><li><strong>Order of Conviction:</strong> Justifies conquest with 'salvation,' 'civilization,' imposing its values, believing it's best for the world.</li></ul>
+                <h3>3. Main Species</h3>
+                <ul><li><strong>Human Centrism:</strong> Humans are the core and ruling class, based on "The Aurean Guides" doctrine.</li></ul>
+                <h3>4. Values: The Aurean Guides</h3>
+                 <ul><li><strong>Name Meaning:</strong> 'Aurea' (radiant/supreme value) + 'Guides' (human mission to lead others).</li><li><strong>Core Doctrines:</strong><ol><li>Humans are Aurea's chosen guides, tasked with leading others.</li><li>Aurea's light is order/power; strength establishes order and serves Aurea.</li><li>Constant advance and expansion are devotion to Aurea.</li><li>The Emperor ("Brightest Star") is sacred, an incarnation of Aurea, with absolute authority.</li></ol></li></ul>
+                <h3>5. Social Structure and Governing Ideology</h3>
+                <ul><li><strong>Structure:</strong> Medieval feudal society (Emperor, nobles, serfs).</li><li><strong>Rule of "The Aurean Guides":</strong> Doctrine ingrained in laws, education, culture; a spiritual and governing pillar.</li><li><strong>Meritocracy:</strong> Limited opportunities for status rise through ability/achievements, especially military.</li></ul>
+                <h3>6. Lumina Empire Major Power Systems</h3>
+                 <details>
+                    <summary>Knights (기사)</summary>
+                    <p>Knights possess superhuman combat abilities through 'Aura' training.</p>
+                    <h4>Aura (오라)</h4>
+                    <ul><li><strong>Aura Core:</strong> Formed by condensing Mana in the heart, fused with vitality/mental strength; determines potential.</li><li><strong>Bodily Circuits:</strong> Aura circulates through microscopic pathways, strengthening the body and increasing Aura capacity.</li><li><strong>Aura Shaping:</strong> Precise control of Aura for enhancement, concentration, release, and shaping.</li></ul>
+                     <h4>Knight Ranks</h4>
+                     <ul><li><strong>Aura User / Novice Knight:</strong> Basic body/weapon enhancement.</li><li><strong>Aura Expert / Elite Knight:</strong> Precise control, significant enhancement, limited application techniques.</li><li><strong>Aura Master / Grand Knight:</strong> Free manipulation, transcendent abilities, special techniques.</li><li><strong>Armament:</strong> Heavy armor and destructive weapons enhanced by Aura.</li></ul>
+                     <h4>Knight Organizations</h4>
+                     <ul><li><strong>Knight Orders under Lords:</strong> Local military foundation, loyal to their lords.</li><li><strong>Luminous Knights:</strong> Emperor's elite order, superior in all aspects, guards Emperor and enforces his will.</li></ul>
+                </details>
+                 <details>
+                    <summary>Wizards (마법사)</summary>
+                    <p>Systematically trained mages manipulating 'Mana'.</p>
+                    <h4>Magic: Principle and System</h4>
+                    <ul><li><strong>Mana Sphere:</strong> Formed by condensing Mana in the heart, a reservoir for casting.</li><li><strong>Spell Imprinting:</strong> Imprinting 'Spell Formulas' onto the Mana Sphere to define magic.</li><li><strong>Floor Levels & Titles:</strong><ul><li>1st~3rd Floor: Apprentice Mage (Basic learning).</li><li>4th~6th Floor: Mage (Stable sphere, complex spells).</li><li>7th Floor: Sorcerer (Unique level, original spells).</li><li>8th~9th Floor: Archmage (Legendary, battlefield-changing power).</li></ul></li></ul>
+                    <h4>Wizard Organizations</h4>
+                    <ul><li><strong>Mage Tower-Centric System:</strong> Magic research/training centered in the capital's Mage Tower, under strict Imperial control.</li><li><strong>Hierarchy and Management:</strong> Strict hierarchy based on floor/ability/contribution; elite but supervised group.</li></ul>
+                </details>
+            </div>
+            <div class="lang-ko">
+                <h1>☀️ 루미나 제국</h1>
+                <h3>1. 제국의 명칭</h3>
+                <ul><li><strong>명칭:</strong> 루미나 제국. '빛'(문명/질서)을 퍼뜨린다는 의미이며, 영광과 패권주의적 힘을 상징합니다.</li></ul>
+                <h3>2. 사회적 분위기</h3>
+                <ul><li><strong>팽창주의 & 힘 숭배:</strong> 혈통보다 능력을 중시하고, 끊임없이 팽창하려 합니다.</li><li><strong>신념의 질서:</strong> '구원', '문명화'를 명분으로 정복을 정당화하고, 자신들의 가치관을 강요하며, 그것이 세상을 위한 최선이라 믿습니다.</li></ul>
+                <h3>3. 주축 종족</h3>
+                <ul><li><strong>인간 중심주의:</strong> "인도자 아우레아" 교리에 따라 인간이 핵심이자 지배 계층입니다.</li></ul>
+                <h3>4. 가치관: 인도자 아우레아</h3>
+                 <ul><li><strong>명칭 의미:</strong> '아우레아'(찬란한/최고의 가치) + '인도자'(타자를 이끌어야 할 인간의 사명).</li><li><strong>핵심 교리:</strong><ol><li>인간은 아우레아의 선택을 받은 인도자이며, 타자를 이끌 사명이 있다.</li><li>아우레아의 빛은 질서이자 힘이며, 힘으로 질서를 세우는 것은 아우레아를 섬기는 길이다.</li><li>끊임없는 전진과 팽창은 아우레아를 향한 헌신이다.</li><li>황제("가장 빛나는 별")는 아우레아의 화신으로 신성하며, 절대적 권위를 지닌다.</li></ol></li></ul>
+                <h3>5. 사회 구조 및 통치 이념</h3>
+                <ul><li><strong>구조:</strong> 중세 봉건 사회 (황제, 귀족, 농노).</li><li><strong>"인도자 아우레아"의 지배:</strong> 교리가 법, 교육, 문화 전반에 깊이 뿌리내려 정신적, 통치적 지주 역할을 합니다.</li><li><strong>능력주의:</strong> 제한적이지만, 능력/업적, 특히 군공을 통해 신분 상승 기회가 열려 있습니다.</li></ul>
+                <h3>6. 루미나 제국 주요 이능 체계</h3>
+                 <details>
+                    <summary>기사 (Knight)</summary>
+                    <p>기사들은 '오러' 수련을 통해 초인적인 전투 능력을 갖춥니다.</p>
+                    <h4>오러 (Aura)</h4>
+                    <ul><li><strong>오러 코어:</strong> 심장에서 마나를 응축시켜 생명력/정신력과 융합하여 형성하며, 잠재력을 결정합니다.</li><li><strong>체내 서킷:</strong> 오러는 미세한 경로를 순환하며 신체를 강화하고 오러 용량을 늘립니다.</li><li><strong>오러 형상화:</strong> 오러를 정밀하게 제어하여 강화, 집중, 방출, 형상화합니다.</li></ul>
+                     <h4>기사 등급</h4>
+                     <ul><li><strong>오러 유저 / 수습 기사:</strong> 기본적인 신체/무기 강화.</li><li><strong>오러 익스퍼트 / 정예 기사:</strong> 정밀 제어, 상당한 강화, 제한적 응용 기술.</li><li><strong>오러 마스터 / 그랜드 나이트:</strong> 자유로운 조작, 초월적 능력, 특수 기술.</li><li><strong>무장:</strong> 오러로 강화된 중갑과 파괴적인 무기.</li></ul>
+                     <h4>기사 조직</h4>
+                     <ul><li><strong>영주 휘하 기사단:</strong> 지역 군사 기반, 영주에게 충성.</li><li><strong>루미너스 기사단:</strong> 황제 직속 정예 기사단, 모든 면에서 우월하며 황제를 수호하고 그의 의지를 집행합니다.</li></ul>
+                </details>
+                 <details>
+                    <summary>마법사 (Wizard)</summary>
+                    <p>'마나'를 조작하는 체계적으로 훈련된 마법사들.</p>
+                    <h4>마법: 원리 및 체계</h4>
+                    <ul><li><strong>마나 스피어:</strong> 심장에서 마나를 응축시켜 형성하며, 시전을 위한 저장소입니다.</li><li><strong>스펠 임프린팅:</strong> 마나 스피어에 '주문 공식'을 각인하여 마법을 정의합니다.</li><li><strong>플로어 레벨 & 칭호:</strong><ul><li>1~3층: 견습 마법사 (기초 학습).</li><li>4~6층: 마법사 (안정된 스피어, 복잡한 주문).</li><li>7층: 소서러 (독특한 경지, 독창적 주문).</li><li>8~9층: 대마법사 (전설적, 전장을 바꾸는 힘).</li></ul></li></ul>
+                    <h4>마법사 조직</h4>
+                    <ul><li><strong>마탑 중심 체계:</strong> 수도 마탑을 중심으로 마법 연구/훈련이 이루어지며, 제국의 엄격한 통제를 받습니다.</li><li><strong>계층 및 관리:</strong> 층/능력/기여도에 따른 엄격한 계층; 엘리트 집단이지만 감시받습니다.</li></ul>
+                </details>
+            </div>
         </div>
         
         <div id="republic" class="section">
-            <h1>⚙️ The Timocratic Republic - A Symphony of Wealth and Steam</h1>
-            
-            <h3>1. Republic's Name</h3>
-            <ul>
-                <li><strong>Name:</strong> The Arcadian Timocratic Republic (아르카디안 티모크라틱 공화국). Rose from the 'Great Revolution of Steel and Steam'. Wealth, not virtue, now dictates fate, justified by opposition to the Lumina Empire.</li>
-            </ul>
-
-            <h3>2. Social Atmosphere</h3>
-            <ul>
-                <li><strong>Technological Worship & Polarization:</strong> Latest tech is praised, but benefits few, widening the wealth gap.</li>
-                <li><strong>Public Unity & Private Grievances:</strong> Official unity against Lumina, but private dissatisfaction with inequality exists.</li>
-                <li><strong>Anxious Life Under Surveillance:</strong> Overt surveillance for 'national security' stifles free expression.</li>
-                <li><strong>Fierce Struggle for Survival:</strong> Intense competition for wealth and opportunity.</li>
-            </ul>
-
-            <h3>3. Main Species</h3>
-            <ul>
-                <li><strong>Pherians:</strong>
-                    <ul>
-                        <li>Diverse animalistic traits (wolfkin, catkin, etc.) with varied manifestation.</li>
-                        <li>Superior physical abilities and instincts.</li>
-                        <li>Distinct sensory organs.</li>
-                    </ul>
-                </li>
-                <li><strong>Chthonians:</strong>
-                    <ul>
-                        <li>Short (1.1~1.4m), sturdy, muscular build.</li>
-                        <li>Excellent dexterity, concentration, suited for machinery/mining.</li>
-                        <li>Strong endurance, adapted to underground/harsh work.</li>
-                        <li>Males often have stiff, full beards.</li>
-                    </ul>
-                </li>
-            </ul>
-
-            <h3>4. Republic's Values</h3>
-            <ul>
-                <li><strong>Plutocracy:</strong> Wealth is the highest value; ability judged by possessions.</li>
-                <li><strong>Illusion of Progress:</strong> Tech development symbolizes power; belief it can solve all problems.</li>
-                <li><strong>Extreme Efficiency & Pragmatism:</strong> Everything judged by efficiency; non-practical arts/philosophy disregarded unless profitable.</li>
-            </ul>
-
-            <h3>5. Social Structure and Governing Ideology</h3>
-            <ul>
-                <li><strong>Structure:</strong> Officially a republic, but voting rights tied to wealth, creating a divide between the enfranchised, laborers, and marginalized.</li>
-                <li><strong>"Timocracy" Rule:</strong> 'Wealth equals ability' principle ingrained in laws, education, politics.</li>
-                <li><strong>Performance-Based Opportunity:</strong> Limited opportunities for status rise via wealth/tech, but biased towards those with existing capital.</li>
-            </ul>
-            
-            <h3>6. Republic Major Military Systems</h3>
-             <details>
-                <summary>Mythos Engineers</summary>
-                <p>Engineers analyzing and creating tech to artificially induce/optimize Animarium story acquisition.</p>
-                <h4>Role</h4>
-                <ul>
-                    <li><strong>Logos Taxis Development:</strong> Develop 'standardized story acquisition programs' for efficient story gain.</li>
-                    <li><strong>Story Pattern Analysis:</strong> Analyze Animariums, database story generation/enhancement patterns, improve Logos Taxis.</li>
-                    <li><strong>Methodos Protocol Design:</strong> Design training for Methodos agents based on Logos Taxis.</li>
-                </ul>
-            </details>
-             <details>
-                <summary>Methodos</summary>
-                <p>Special agents with powerful, customized 'stories' acquired via Logos Taxis.</p>
-                <h4>Ability Characteristics</h4>
-                <ul>
-                    <li><strong>Customized Story Portfolio:</strong> Possess 'stories' tailored for specific missions.</li>
-                    <li><strong>Standardized Combat Training:</strong> Proficient in Republic combat techniques.</li>
-                    <li><strong>Mental/Emotional Control:</strong> Trained to control emotions and maintain composure.</li>
-                    <li><strong>Armament:</strong> Advanced steam-tech gear combined with story-derived abilities for special ops.</li>
-                </ul>
-                 <h4>Methodos Ranks</h4>
-                 <ul>
-                    <li><strong>Gamma Grade:</strong> Basic training, standardized portfolio, support roles.</li>
-                    <li><strong>Beta Grade:</strong> Advanced training, specialized stories, complex missions.</li>
-                    <li><strong>Alpha Grade:</strong> Highest level, exceptional stories, national crisis/top-secret ops.</li>
-                </ul>
-            </details>
+             <div class="lang-en">
+                <h1>⚙️ The Timocratic Republic - A Symphony of Wealth and Steam</h1>
+                <h3>1. Republic's Name</h3>
+                <ul><li><strong>Name:</strong> The Arcadian Timocratic Republic. Rose from the 'Great Revolution of Steel and Steam'. Wealth, not virtue, now dictates fate, justified by opposition to the Lumina Empire.</li></ul>
+                <h3>2. Social Atmosphere</h3>
+                <ul><li><strong>Technological Worship & Polarization:</strong> Latest tech is praised, but benefits few, widening the wealth gap.</li><li><strong>Public Unity & Private Grievances:</strong> Official unity against Lumina, but private dissatisfaction with inequality exists.</li><li><strong>Anxious Life Under Surveillance:</strong> Overt surveillance for 'national security' stifles free expression.</li><li><strong>Fierce Struggle for Survival:</strong> Intense competition for wealth and opportunity.</li></ul>
+                <h3>3. Main Species</h3>
+                <ul><li><strong>Pherians:</strong> Diverse animalistic traits (wolfkin, catkin, etc.) with varied manifestation; Superior physical abilities and instincts; Distinct sensory organs.</li><li><strong>Chthonians:</strong> Short, sturdy build; Excellent dexterity/concentration; Strong endurance; Males often have beards.</li></ul>
+                <h3>4. Republic's Values</h3>
+                <ul><li><strong>Plutocracy:</strong> Wealth is the highest value; ability judged by possessions.</li><li><strong>Illusion of Progress:</strong> Tech development symbolizes power; belief it can solve all problems.</li><li><strong>Extreme Efficiency & Pragmatism:</strong> Everything judged by efficiency; non-practical arts/philosophy disregarded unless profitable.</li></ul>
+                <h3>5. Social Structure and Governing Ideology</h3>
+                <ul><li><strong>Structure:</strong> Officially a republic, but voting rights tied to wealth, creating a divide between the enfranchised, laborers, and marginalized.</li><li><strong>"Timocracy" Rule:</strong> 'Wealth equals ability' principle ingrained in laws, education, politics.</li><li><strong>Performance-Based Opportunity:</strong> Limited opportunities for status rise via wealth/tech, but biased towards those with existing capital.</li></ul>
+                <h3>6. Republic Major Military Systems</h3>
+                 <details>
+                    <summary>Mythos Engineers</summary>
+                    <p>Engineers analyzing and creating tech to artificially induce/optimize Animarium story acquisition.</p>
+                    <h4>Role</h4>
+                    <ul><li><strong>Logos Taxis Development:</strong> Develop 'standardized story acquisition programs' for efficient story gain.</li><li><strong>Story Pattern Analysis:</strong> Analyze Animariums, database story generation/enhancement patterns, improve Logos Taxis.</li><li><strong>Methodos Protocol Design:</strong> Design training for Methodos agents based on Logos Taxis.</li></ul>
+                </details>
+                 <details>
+                    <summary>Methodos</summary>
+                    <p>Special agents with powerful, customized 'stories' acquired via Logos Taxis.</p>
+                    <h4>Ability Characteristics</h4>
+                    <ul><li><strong>Customized Story Portfolio:</strong> Possess 'stories' tailored for specific missions.</li><li><strong>Standardized Combat Training:</strong> Proficient in Republic combat techniques.</li><li><strong>Mental/Emotional Control:</strong> Trained to control emotions and maintain composure.</li><li><strong>Armament:</strong> Advanced steam-tech gear combined with story-derived abilities for special ops.</li></ul>
+                     <h4>Methodos Ranks</h4>
+                     <ul><li><strong>Gamma Grade:</strong> Basic training, standardized portfolio, support roles.</li><li><strong>Beta Grade:</strong> Advanced training, specialized stories, complex missions.</li><li><strong>Alpha Grade:</strong> Highest level, exceptional stories, national crisis/top-secret ops.</li></ul>
+                </details>
+             </div>
+             <div class="lang-ko">
+                <h1>⚙️ 티모크라틱 공화국 - 부와 증기의 교향곡</h1>
+                <h3>1. 공화국의 명칭</h3>
+                <ul><li><strong>명칭:</strong> 아르카디아 티모크라틱 공화국. '강철과 증기의 대혁명'으로 탄생했으며, 미덕이 아닌 부가 운명을 결정하고, 루미나 제국에 대한 반발로 정당화됩니다.</li></ul>
+                <h3>2. 사회적 분위기</h3>
+                <ul><li><strong>기술 숭배 & 양극화:</strong> 최신 기술을 찬양하지만 소수에게만 혜택이 돌아가 부의 격차를 심화시킵니다.</li><li><strong>공식적 단결 & 사적 불만:</strong> 공식적으로는 루미나에 대항해 단결하지만, 불평등에 대한 사적인 불만이 존재합니다.</li><li><strong>감시 속 불안한 삶:</strong> '국가 안보'를 위한 노골적인 감시가 자유로운 표현을 억압합니다.</li><li><strong>치열한 생존 경쟁:</strong> 부와 기회를 얻기 위한 치열한 경쟁이 벌어집니다.</li></ul>
+                <h3>3. 주축 종족</h3>
+                <ul><li><strong>페리안:</strong> 다양한 동물적 특징(늑대인간, 고양이인간 등)을 지니며, 우월한 신체 능력과 본능, 특이한 감각 기관을 가졌습니다.</li><li><strong>크토니안:</strong> 키가 작고(1.1~1.4m) 강건하며 근육질입니다. 뛰어난 손재주와 집중력으로 기계/채광에 적합하며, 강한 지구력으로 지하/혹독한 작업 환경에 적응했습니다. 남성들은 뻣뻣하고 풍성한 수염을 기르는 경우가 많습니다.</li></ul>
+                <h3>4. 공화국의 가치관</h3>
+                <ul><li><strong>배금주의:</strong> 부가 최고의 가치이며, 능력은 소유물로 판단됩니다.</li><li><strong>진보의 환상:</strong> 기술 발전이 힘을 상징하며, 모든 문제를 해결할 수 있다고 믿습니다.</li><li><strong>극단적 효율 & 실용주의:</strong> 모든 것을 효율성으로 판단하며, 수익성이 없는 비실용적인 예술/철학은 무시됩니다.</li></ul>
+                <h3>5. 사회 구조 및 통치 이념</h3>
+                <ul><li><strong>구조:</strong> 공식적으로는 공화국이지만, 투표권이 부와 연결되어 유권자, 노동자, 소외 계층 간의 분열을 만듭니다.</li><li><strong>"티모크라시" 통치:</strong> '부는 능력'이라는 원칙이 법, 교육, 정치에 깊이 뿌리내려 있습니다.</li><li><strong>성과 기반 기회:</strong> 부/기술을 통한 신분 상승 기회는 제한적이며, 기존 자본을 가진 자에게 유리합니다.</li></ul>
+                <h3>6. 공화국 주요 군사 체계</h3>
+                 <details>
+                    <summary>뮈토스 엔지니어</summary>
+                    <p>아니마리움 이야기 획득을 인위적으로 유도/최적화하는 기술을 분석하고 창조하는 엔지니어들.</p>
+                    <h4>역할</h4>
+                    <ul><li><strong>로고스 탁시스 개발:</strong> 효율적인 이야기 획득을 위한 '표준화된 이야기 획득 프로그램'을 개발합니다.</li><li><strong>이야기 패턴 분석:</strong> 아니마리움을 분석하고, 이야기 생성/강화 패턴을 데이터베이스화하여 로고스 탁시스를 개선합니다.</li><li><strong>메소도스 프로토콜 설계:</strong> 로고스 탁시스를 기반으로 메소도스 요원을 위한 훈련을 설계합니다.</li></ul>
+                </details>
+                 <details>
+                    <summary>메소도스</summary>
+                    <p>로고스 탁시스를 통해 강력하고 맞춤화된 '이야기'를 획득한 특수 요원들.</p>
+                    <h4>능력 특징</h4>
+                    <ul><li><strong>맞춤형 이야기 포트폴리오:</strong> 특정 임무에 맞춰진 '이야기'를 보유합니다.</li><li><strong>표준화된 전투 훈련:</strong> 공화국 전투 기술에 능숙합니다.</li><li><strong>정신/감정 통제:</strong> 감정을 통제하고 침착함을 유지하도록 훈련받았습니다.</li><li><strong>무장:</strong> 특수 작전을 위해 이야기에서 파생된 능력과 결합된 첨단 증기 기술 장비를 사용합니다.</li></ul>
+                     <h4>메소도스 등급</h4>
+                     <ul><li><strong>감마 등급:</strong> 기본 훈련, 표준화된 포트폴리오, 지원 역할.</li><li><strong>베타 등급:</strong> 고급 훈련, 특화된 이야기, 복잡한 임무.</li><li><strong>알파 등급:</strong> 최고 수준, 예외적인 이야기, 국가 위기/일급 비밀 작전.</li></ul>
+                </details>
+             </div>
         </div>
-        
+
         <div id="manseru" class="section">
-            <h1>🫱🏻‍🫲🏽 Manseru - The Free City of the Northeast</h1>
-            <p>An independent free city ("Miracle on Water") built on a delta, known for trading 'stories' and wondrous treasures (奇寶, gibo).</p>
-
-            <h3>1. City Geography and Landscape</h3>
-            <ul>
-                <li><strong>Water City:</strong> Built on a delta, appearing to float.</li>
-                <li><strong>Canals and Bridges:</strong> Spiderweb of canals serves as main routes, connected by numerous bridges.</li>
-                <li><strong>Architecture:</strong> Multi-story and stilt houses along waterfronts; lavish pavilions show wealth.</li>
-                <li><strong>Light and Fog:</strong> Bright reflections by day; dreamy fog with shimmering lanterns at night/morning.</li>
-            </ul>
-
-            <h3>2. Main Resident Composition</h3>
-            <ul>
-                <li><strong>Multi-species Melting Pot:</strong> Diverse species, including various demi-humans, coexist, having fled Lumina.</li>
-            </ul>
-
-            <h3>3. Lifestyle and Social Structure</h3>
-            <ul>
-                <li><strong>Lifestyle:</strong>
-                    <ul>
-                        <li>Life linked to water: canals for routes, boats for transport.</li>
-                        <li>Vibrant mix of cultures, goods; but also slums, black markets, clandestine activities.</li>
-                        <li>Periodic mask festivals (especially 'Full Moon Mask Festival') for free interaction.</li>
-                        <li>Arts like sword dances, songs, storytelling flourish.</li>
-                    </ul>
-                </li>
-                <li><strong>Social Structure:</strong>
-                    <ul>
-                        <li><strong>Manseru Grand Council:</strong> Highest body, reps from factions (schools, merchants, etc.).</li>
-                        <li><strong>Doge:</strong> Leader elected by Council, represents city, mediates factions.</li>
-                    </ul>
-                </li>
-            </ul>
-
-            <h3>4. Values</h3>
-            <ul>
-                <li><strong>Pride in Independence:</strong> Strong pride in self-reliant prosperity.</li>
-                <li><strong>Art of Balance:</strong> Values diplomacy, information warfare, subtle balance over direct power.</li>
-                <li><strong>Non-Interference:</strong> Respects private matters, avoids unnecessary disputes.</li>
-            </ul>
-
-            <h3>5. Manseru Major Power Systems</h3>
-             <details>
-                <summary>Tales Broker (이야기 브로커)</summary>
-                <p>Assess and mediate 'story' transactions using a special ability to interact with Animariums.</p>
-                <h4>Ability</h4>
-                <ul>
-                    <li><strong>Story Resonance:</strong> Sense story essence, emotions, potential, dangers. Can visualize core scenes.</li>
-                    <li><strong>Soul Mediation:</strong> Transfer story power by connecting Animariums; high-risk, high-reward ability.</li>
-                </ul>
-                 <h4>Animarium and Broker</h4>
-                <ul>
-                    <li>Born with a "Broker of Tales" story; ability grows with its grade, strengthened by trading experiences.</li>
-                </ul>
-            </details>
-            <details>
-                <summary>Martial Artist (武人)</summary>
-                <p>Practitioners of a unique Qi system, achieving superhuman abilities through training.</p>
-                <h4>Qigong (氣功)</h4>
-                <ul>
-                    <li><strong>Dantian (丹田):</strong> Condense 'Qi' (天地之氣) into 'Internal Energy' (內功) in the Dantian.</li>
-                    <li><strong>Meridian Qi Circulation:</strong> Circulate Internal Energy via Meridians (經脈) to strengthen/purify the body.</li>
-                    <li><strong>Technique & Method Mastery:</strong> Manipulate Internal Energy for enhancement, attacks (sword qi), defense (protective shield), and special effects.</li>
-                </ul>
-                 <h4>Martial Artist Ranks</h4>
-                 <ul>
-                    <li>Third-Rate Warrior: Beginner, minimal Qi.</li>
-                    <li>Second-Rate Warrior: Considerable Internal Energy, skillful techniques.</li>
-                    <li>First-Rate Warrior: Smooth manipulation, deep understanding, powerful Qi.</li>
-                    <li>Peak Master: Near-perfect mastery, manifest Qi (sword qi, saber aura), renowned.</li>
-                    <li>Transcendent Master: Legendary, influences environment, power beyond imagination.</li>
-                    <li>Armament: Various weapons (bare hands, swords, sabers, spears, etc.), unconventional methods.</li>
-                </ul>
-                 <h4>Martial Artist Organizations</h4>
-                 <ul>
-                    <li><strong>Contracted Mercenary Companies:</strong> Elite units for city defense/missions.</li>
-                    <li><strong>Escorts of the Ten Great Houses:</strong> Private forces protecting influential factions.</li>
-                </ul>
-            </details>
+             <div class="lang-en">
+                <h1>🫱🏻‍🫲🏽 Manseru - The Free City of the Northeast</h1>
+                <p>An independent free city ("Miracle on Water") built on a delta, known for trading 'stories' and wondrous treasures (奇寶, gibo).</p>
+                <h3>1. City Geography and Landscape</h3>
+                <ul><li><strong>Water City:</strong> Built on a delta, appearing to float.</li><li><strong>Canals and Bridges:</strong> Spiderweb of canals serves as main routes, connected by numerous bridges.</li><li><strong>Architecture:</strong> Multi-story and stilt houses along waterfronts; lavish pavilions show wealth.</li><li><strong>Light and Fog:</strong> Bright reflections by day; dreamy fog with shimmering lanterns at night/morning.</li></ul>
+                <h3>2. Main Resident Composition</h3>
+                <ul><li><strong>Multi-species Melting Pot:</strong> Diverse species, including various demi-humans, coexist, having fled Lumina.</li></ul>
+                <h3>3. Lifestyle and Social Structure</h3>
+                <ul><li><strong>Lifestyle:</strong> Life linked to water; Vibrant mix of cultures, goods, but also slums, black markets; Periodic mask festivals; Arts flourish.</li><li><strong>Social Structure:</strong> Manseru Grand Council (highest body, reps from factions); Doge (elected leader, represents city, mediates).</li></ul>
+                <h3>4. Values</h3>
+                <ul><li><strong>Pride in Independence:</strong> Strong pride in self-reliant prosperity.</li><li><strong>Art of Balance:</strong> Values diplomacy, information warfare, subtle balance over direct power.</li><li><strong>Non-Interference:</strong> Respects private matters, avoids unnecessary disputes.</li></ul>
+                <h3>5. Manseru Major Power Systems</h3>
+                 <details>
+                    <summary>Tales Broker (이야기 브로커)</summary>
+                    <p>Assess and mediate 'story' transactions using a special ability to interact with Animariums.</p>
+                    <h4>Ability</h4>
+                    <ul><li><strong>Story Resonance:</strong> Sense story essence, emotions, potential, dangers. Can visualize core scenes.</li><li><strong>Soul Mediation:</strong> Transfer story power by connecting Animariums; high-risk, high-reward ability.</li></ul>
+                     <h4>Animarium and Broker</h4>
+                    <ul><li>Born with a "Broker of Tales" story; ability grows with its grade, strengthened by trading experiences.</li></ul>
+                </details>
+                <details>
+                    <summary>Martial Artist (武人)</summary>
+                    <p>Practitioners of a unique Qi system, achieving superhuman abilities through training.</p>
+                    <h4>Qigong (氣功)</h4>
+                    <ul><li><strong>Dantian (丹田):</strong> Condense 'Qi' into 'Internal Energy' in the Dantian.</li><li><strong>Meridian Qi Circulation:</strong> Circulate Internal Energy via Meridians to strengthen/purify the body.</li><li><strong>Technique & Method Mastery:</strong> Manipulate Internal Energy for enhancement, attacks, defense, and special effects.</li></ul>
+                     <h4>Martial Artist Ranks</h4>
+                     <ul><li>Third-Rate Warrior: Beginner.</li><li>Second-Rate Warrior: Considerable Internal Energy.</li><li>First-Rate Warrior: Smooth manipulation.</li><li>Peak Master: Near-perfect mastery, manifest Qi.</li><li>Transcendent Master: Legendary.</li><li>Armament: Various weapons.</li></ul>
+                     <h4>Martial Artist Organizations</h4>
+                     <ul><li><strong>Contracted Mercenary Companies:</strong> Elite units.</li><li><strong>Escorts of the Ten Great Houses:</strong> Private forces.</li></ul>
+                </details>
+             </div>
+             <div class="lang-ko">
+                <h1>🫱🏻‍🫲🏽 만서루 - 동북부의 자유 도시</h1>
+                 <p>삼각주에 세워진 독립 자유 도시("물 위의 기적"), '이야기'와 기보(奇寶) 거래로 유명합니다.</p>
+                 <h3>1. 도시 지리 및 경관</h3>
+                 <ul><li><strong>수상 도시:</strong> 삼각주 위에 세워져 물 위에 떠 있는 것처럼 보입니다.</li><li><strong>운하와 다리:</strong> 거미줄 같은 운하가 주요 경로이며, 수많은 다리로 연결됩니다.</li><li><strong>건축 양식:</strong> 물가를 따라 다층 및 수상 가옥이 있으며, 호화로운 누각은 부를 보여줍니다.</li><li><strong>빛과 안개:</strong> 낮에는 밝은 반사광, 밤/아침에는 반짝이는 등불과 함께 몽환적인 안개.</li></ul>
+                 <h3>2. 주요 거주민 구성</h3>
+                 <ul><li><strong>다종족 용광로:</strong> 루미나를 피해 온 다양한 아인족을 포함한 여러 종족이 공존합니다.</li></ul>
+                 <h3>3. 생활 방식 및 사회 구조</h3>
+                 <ul><li><strong>생활 방식:</strong> 물과 연결된 삶; 활기찬 문화, 상품, 그리고 빈민가, 암시장; 주기적인 가면 축제; 예술 번성.</li><li><strong>사회 구조:</strong> 만서루 대평의회 (최고 기구, 각 세력 대표); 도제 (선출된 지도자, 도시 대표, 중재자).</li></ul>
+                 <h3>4. 가치관</h3>
+                 <ul><li><strong>독립에 대한 자부심:</strong> 자립 번영에 대한 강한 자부심.</li><li><strong>균형의 미학:</strong> 직접적인 힘보다 외교, 정보전, 미묘한 균형을 중시합니다.</li><li><strong>불간섭 원칙:</strong> 사적인 문제를 존중하고 불필요한 분쟁을 피합니다.</li></ul>
+                 <h3>5. 만서루 주요 이능 체계</h3>
+                 <details>
+                    <summary>이야기 브로커 (Tales Broker)</summary>
+                    <p>아니마리움과 상호작용하는 특별한 능력을 사용하여 '이야기' 거래를 평가하고 중개합니다.</p>
+                    <h4>능력</h4>
+                    <ul><li><strong>이야기 공명:</strong> 이야기의 본질, 감정, 잠재력, 위험을 감지합니다. 핵심 장면을 시각화할 수 있습니다.</li><li><strong>영혼 매개술:</strong> 아니마리움을 연결하여 이야기의 힘을 이전합니다; 고위험, 고수익 능력.</li></ul>
+                     <h4>아니마리움과 브로커</h4>
+                    <ul><li>"이야기 중개인" 이야기를 가지고 태어나며, 등급이 오르고 거래 경험이 쌓이면 능력이 성장합니다.</li></ul>
+                </details>
+                <details>
+                    <summary>무인 (Martial Artist)</summary>
+                    <p>독특한 기(氣) 시스템 수련자로, 훈련을 통해 초인적인 능력을 얻습니다.</p>
+                    <h4>기공 (Qigong)</h4>
+                    <ul><li><strong>단전 (Dantian):</strong> '기'를 단전에 응축하여 '내공'을 만듭니다.</li><li><strong>경맥 기 순환:</strong> 경맥을 통해 내공을 순환시켜 신체를 강화/정화합니다.</li><li><strong>기예 및 심법 숙달:</strong> 내공을 조작하여 강화, 공격(검기), 방어(호신강기), 특수 효과를 발휘합니다.</li></ul>
+                     <h4>무인 등급</h4>
+                     <ul><li>삼류 고수: 초보자.</li><li>이류 고수: 상당한 내공.</li><li>일류 고수: 원활한 조작.</li><li>절정 고수: 거의 완벽한 숙달, 기 발현.</li><li>초절정 고수: 전설적.</li><li>무장: 다양한 무기.</li></ul>
+                     <h4>무인 조직</h4>
+                     <ul><li><strong>계약 용병단:</strong> 정예 부대.</li><li><strong>십대세가 호위 무사단:</strong> 사병 집단.</li></ul>
+                </details>
+             </div>
         </div>
 
         <div id="utlander" class="section">
-            <h1>❄️ Utlander - Free Savages Beyond the Border</h1>
-            <p>A collective term for various tribes in "Utland" (Outer Land), north of Lumina. Mostly 'Halbriso' (giant-blooded), plus humans and others. Seen as uncivilized.</p>
-
-            <h3>1. Living Environment (Utland)</h3>
-            <ul>
-                <li><strong>Harsh Climate:</strong> Long cold winters, short cool summers; snow, glaciers, fjords, taiga, tundra.</li>
-                <li><strong>Natural Threats:</strong> Blizzards, rugged terrain, large snow wolves, giant bears, mammoths.</li>
-            </ul>
-
-            <h3>2. Main Species</h3>
-            <ul>
-                <li><strong>Halbriso:</strong>
-                    <ul>
-                        <li>Overwhelming height (Males 2.5-3m, Females 2.3-2.7m).</li>
-                        <li>Immense strength, tough skin/bones.</li>
-                        <li>Rapid growth, short lifespan (unstable giant blood).</li>
-                        <li>Coarse, intimidating appearance.</li>
-                        <li>Adapted via physical strength/experience.</li>
-                    </ul>
-                </li>
-            </ul>
-
-            <h3>3. Lifestyle and Social Structure</h3>
-            <ul>
-                <li><strong>Respect for Choice:</strong> Minimal rules, values individual freedom/responsibility; can leave tribes.</li>
-                <li><strong>Diverse Lifestyles:</strong> Settled tribes (herding/villages), nomadic tribes, mountain tribes, sea-faring/raiding tribes.</li>
-                <li><strong>Raiding Culture:</strong> Means for survival, display of strength, gaining honor.</li>
-                <li><strong>Jovial Festival Culture:</strong> Boisterous feasts, songs, competitions after hunts/battles.</li>
-            </ul>
-
-            <h3>4. Values</h3>
-            <ul>
-                <li><strong>Honor and Freedom:</strong> Highest values; detest coercion.</li>
-                <li><strong>Exploration and Adventure:</strong> Curiosity, seeking new experiences/challenges/honor.</li>
-                <li><strong>Flexibility:</strong> Respect customs but will change them if they hinder survival/development.</li>
-            </ul>
-             <h3>5. Utlander Major Power Systems</h3>
-             <details>
-                <summary>Warrior (전사)</summary>
-                <p>Foundation of Utlander society, using 'Fighting Fury' derived from 'Blood Vigor'.</p>
-                <h4>Fighting Fury (투기)</h4>
-                <ul>
-                    <li><strong>Origin - Blood Vigor (혈기):</strong> 'Life energy' in blood, fuel for Fighting Fury. Halbriso have rich Blood Vigor but short lifespans due to its consumption.</li>
-                    <li><strong>Manifestation:</strong> Explosively amplify Blood Vigor via will/emotions (anger, pain, fighting spirit). Wounds/pain can enhance it.</li>
-                    <li><strong>Effects:</strong> Transcendent physical enhancement (swelling muscles, red eyes), monstrous strength/toughness, pain paralysis, intimidation/madness.</li>
-                    <li><strong>Consumption:</strong> Burns life force; excessive use causes aging/shortened lifespan.</li>
-                </ul>
-                <h4>Warrior Honor: Nicknames & Animarium</h4>
-                <ul>
-                    <li>Strength/honor depends on Fighting Fury, Animarium stories, and bestowed 'nicknames'.</li>
-                    <li>Nicknames reflect stories/traits, linked to conceptual attributes.</li>
-                    <li>Higher grade stories = greater respect. (e.g., "Ironfist" - Tale, "Mountain-Splitter" - Legend).</li>
-                    <li>Rare Legend+ stories can overcome Halbriso lifespan limits.</li>
-                </ul>
-            </details>
-             <details>
-                <summary>Shaman (샤먼)</summary>
-                <p>Spiritual pillars, communing with spirits (nature, ancestors) to guide the tribe.</p>
-                <h4>Shaman's Power</h4>
-                <ul>
-                    <li>Commune with spirits via meditation, sacrifices, rituals, dance, song.</li>
-                    <li>Gain wisdom/omens from ancestral spirits.</li>
-                    <li>Sense and understand natural cycles/forces.</li>
-                </ul>
-                <h4>Abilities</h4>
-                <ul>
-                    <li><strong>Healing/Blessing:</strong> Heal with spirits/herbs, care for warriors, bestow blessings.</li>
-                    <li><strong>Divination:</strong> Glimpse future, predict fortune, offer warnings.</li>
-                    <li><strong>Minor Nature Interference:</strong> Limited influence (rain, calm beasts, thicken fog).</li>
-                    <li><strong>Ritual/Tradition Guardians:</strong> Preside over ceremonies, transmit history/myths.</li>
-                    <li><strong>Spiritual Leaders:</strong> Offer guidance, advise chieftains.</li>
-                </ul>
-                 <h4>Shaman Characteristics</h4>
-                <ul>
-                    <li>Often live apart, train alone.</li>
-                    <li>Emphasize harmony with nature.</li>
-                    <li>Power depends on spirits; may require 'price', risks mental corruption.</li>
-                    <li>Value spiritual wisdom, bear responsibility for the tribe's well-being.</li>
-                </ul>
-            </details>
+             <div class="lang-en">
+                <h1>❄️ Utlander - Free Savages Beyond the Border</h1>
+                <p>A collective term for various tribes in "Utland" (Outer Land), north of Lumina. Mostly 'Halbriso' (giant-blooded), plus humans and others. Seen as uncivilized.</p>
+                <h3>1. Living Environment (Utland)</h3>
+                <ul><li><strong>Harsh Climate:</strong> Long cold winters, short cool summers; snow, glaciers, fjords, taiga, tundra.</li><li><strong>Natural Threats:</strong> Blizzards, rugged terrain, large snow wolves, giant bears, mammoths.</li></ul>
+                <h3>2. Main Species</h3>
+                <ul><li><strong>Halbriso:</strong> Overwhelming height; Immense strength, tough skin/bones; Rapid growth, short lifespan; Coarse, intimidating appearance; Adapted via physical strength/experience.</li></ul>
+                <h3>3. Lifestyle and Social Structure</h3>
+                <ul><li><strong>Respect for Choice:</strong> Minimal rules, values individual freedom/responsibility; can leave tribes.</li><li><strong>Diverse Lifestyles:</strong> Settled tribes, nomadic tribes, mountain tribes, sea-faring/raiding tribes.</li><li><strong>Raiding Culture:</strong> Means for survival, display of strength, gaining honor.</li><li><strong>Jovial Festival Culture:</strong> Boisterous feasts, songs, competitions after hunts/battles.</li></ul>
+                <h3>4. Values</h3>
+                <ul><li><strong>Honor and Freedom:</strong> Highest values; detest coercion.</li><li><strong>Exploration and Adventure:</strong> Curiosity, seeking new experiences/challenges/honor.</li><li><strong>Flexibility:</strong> Respect customs but will change them if they hinder survival/development.</li></ul>
+                 <h3>5. Utlander Major Power Systems</h3>
+                 <details>
+                    <summary>Warrior (전사)</summary>
+                    <p>Foundation of Utlander society, using 'Fighting Fury' derived from 'Blood Vigor'.</p>
+                    <h4>Fighting Fury (투기)</h4>
+                    <ul><li><strong>Origin - Blood Vigor (혈기):</strong> 'Life energy' in blood, fuel for Fighting Fury. Halbriso have rich Blood Vigor but short lifespans.</li><li><strong>Manifestation:</strong> Explosively amplify Blood Vigor via will/emotions. Wounds/pain can enhance it.</li><li><strong>Effects:</strong> Transcendent physical enhancement, monstrous strength/toughness, pain paralysis, intimidation/madness.</li><li><strong>Consumption:</strong> Burns life force; excessive use shortens lifespan.</li></ul>
+                    <h4>Warrior Honor: Nicknames & Animarium</h4>
+                    <ul><li>Strength/honor depends on Fighting Fury, Animarium stories, and 'nicknames'.</li><li>Nicknames reflect stories/traits. Higher grade = greater respect. Legend+ can overcome lifespan limits.</li></ul>
+                </details>
+                 <details>
+                    <summary>Shaman (샤먼)</summary>
+                    <p>Spiritual pillars, communing with spirits (nature, ancestors) to guide the tribe.</p>
+                    <h4>Shaman's Power</h4>
+                    <ul><li>Commune with spirits via rituals.</li><li>Gain wisdom/omens from ancestors.</li><li>Sense natural cycles.</li></ul>
+                    <h4>Abilities</h4>
+                    <ul><li><strong>Healing/Blessing:</strong> Heal with spirits/herbs, bestow blessings.</li><li><strong>Divination:</strong> Glimpse future, predict fortune.</li><li><strong>Minor Nature Interference:</strong> Limited influence (rain, calm beasts).</li><li><strong>Ritual/Tradition Guardians:</strong> Preside over ceremonies.</li><li><strong>Spiritual Leaders:</strong> Offer guidance.</li></ul>
+                     <h4>Shaman Characteristics</h4>
+                    <ul><li>Often live apart. Emphasize harmony. Power depends on spirits (risks mental corruption). Value wisdom, bear responsibility.</li></ul>
+                </details>
+             </div>
+             <div class="lang-ko">
+                <h1>❄️ 우트란더 - 경계 너머의 자유로운 야만인</h1>
+                 <p>루미나 북쪽 "우트란트"(바깥 땅)에 거주하는 다양한 부족들의 총칭. 대부분 '할브리조'(거인 혈통)이며, 인간 등 다른 종족도 있습니다. 미개하다고 여겨집니다.</p>
+                 <h3>1. 거주 환경 (우트란트)</h3>
+                 <ul><li><strong>혹독한 기후:</strong> 긴 추운 겨울, 짧고 서늘한 여름; 눈, 빙하, 피오르, 타이가, 툰드라.</li><li><strong>자연적 위협:</strong> 눈보라, 험준한 지형, 거대한 눈 늑대, 거대 곰, 매머드.</li></ul>
+                 <h3>2. 주축 종족</h3>
+                 <ul><li><strong>할브리조:</strong> 압도적인 신장(남성 2.5~3m, 여성 2.3~2.7m); 엄청난 힘, 강인한 피부/뼈; 빠른 성장, 짧은 수명(불안정한 거인 혈통); 거칠고 위협적인 외모; 신체적 힘/경험으로 적응.</li></ul>
+                 <h3>3. 생활 방식 및 사회 구조</h3>
+                 <ul><li><strong>선택 존중:</strong> 최소한의 규칙, 개인의 자유/책임 중시; 부족 이탈 가능.</li><li><strong>다양한 생활 방식:</strong> 정착 부족(목축/마을), 유목 부족, 산악 부족, 해상/약탈 부족.</li><li><strong>약탈 문화:</strong> 생존 수단, 힘 과시, 명예 획득.</li><li><strong>유쾌한 축제 문화:</strong> 사냥/전투 후 떠들썩한 잔치, 노래, 경쟁.</li></ul>
+                 <h3>4. 가치관</h3>
+                 <ul><li><strong>명예와 자유:</strong> 최고의 가치; 강압 혐오.</li><li><strong>탐험과 모험:</strong> 호기심, 새로운 경험/도전/명예 추구.</li><li><strong>유연성:</strong> 관습 존중, 그러나 생존/발전에 방해되면 변경.</li></ul>
+                 <h3>5. 우트란더 주요 이능 체계</h3>
+                 <details>
+                    <summary>전사 (Warrior)</summary>
+                    <p>우트란더 사회의 기반, '혈기'에서 파생된 '투기'를 사용합니다.</p>
+                    <h4>투기 (Fighting Fury)</h4>
+                    <ul><li><strong>기원 - 혈기 (Blood Vigor):</strong> 혈액 속 '생명 에너지', 투기의 연료. 할브리조는 풍부하지만 소모로 단명.</li><li><strong>발현:</strong> 의지/감정(분노, 고통, 투지)으로 혈기를 폭발적으로 증폭. 상처/고통이 강화 가능.</li><li><strong>효과:</strong> 초월적 신체 강화(근육 팽창, 붉은 눈), 괴력/강인함, 고통 마비, 위협/광기.</li><li><strong>소모:</strong> 생명력 연소; 과다 사용 시 노화/수명 단축.</li></ul>
+                    <h4>전사의 명예: 별명 & 아니마리움</h4>
+                    <ul><li>힘/명예는 투기, 아니마리움 이야기, '별명'에 달려 있습니다.</li><li>별명은 이야기/특징 반영. 높은 등급 = 더 큰 존경. 전설+는 수명 한계 극복 가능.</li></ul>
+                </details>
+                 <details>
+                    <summary>주술사 (Shaman)</summary>
+                    <p>영적 기둥, 정령(자연, 조상)과 교감하여 부족을 인도합니다.</p>
+                    <h4>주술사의 힘</h4>
+                    <ul><li>의식을 통해 정령과 교감.</li><li>조상 정령으로부터 지혜/징조 획득.</li><li>자연의 순환 감지/이해.</li></ul>
+                    <h4>능력</h4>
+                    <ul><li><strong>치유/축복:</strong> 정령/약초로 치유, 전사 돌봄, 축복 부여.</li><li><strong>점술:</strong> 미래 엿보기, 운세 예측, 경고 제공.</li><li><strong>미약한 자연 간섭:</strong> 제한적 영향력(비, 짐승 진정).</li><li><strong>의식/전통 수호자:</strong> 의식 주관, 역사/신화 전수.</li><li><strong>영적 지도자:</strong> 조언 제공, 족장 자문.</li></ul>
+                     <h4>주술사 특징</h4>
+                    <ul><li>종종 떨어져 살며, 홀로 수련. 자연과의 조화 강조. 힘은 정령에 의존 (정신 오염 위험). 지혜 중시, 부족 안녕 책임.</li></ul>
+                </details>
+             </div>
         </div>
 
         <div id="al-azuma" class="section">
-            <h1>🏜️ Al-Azuma - Tomb of Forgotten Greatness</h1>
-            <p>Vast desert beyond the Republic, holding colossal ruins of a hyper-ancient civilization. Inhabited by Azmari. Some Republic tech originated here; generally seen as a dangerous, secret-filled expanse.</p>
-
-            <h3>1. Living Environment</h3>
-            <ul>
-                <li><strong>Extreme Climate:</strong> Scorching days, freezing nights. Powerful sandstorms (Samum). Scarce water (oases, ruins).</li>
-                <li><strong>Desolate Terrain:</strong> Red sand dunes, badlands, mesas, buttes, canyons, intertwined with massive ancient ruins.</li>
-            </ul>
-
-            <h3>2. Primary Species</h3>
-            <ul>
-                <li><strong>Azmari:</strong>
-                    <ul>
-                        <li>Taller, slender, graceful yet hardy physique.</li>
-                        <li>Desert adapted (skin, eyes, temperature resistance).</li>
-                        <li>Long lifespan, ancient traces (skin patterns, hair color).</li>
-                        <li>Long, pointed ears for sensitive hearing.</li>
-                        <li>Technologically adept dexterity.</li>
-                    </ul>
-                </li>
-            </ul>
-
-            <h3>3. Lifestyle and Social Structure</h3>
-            <ul>
-                <li><strong>Solitary & Sparse:</strong> Many wanderers; some settlements near oases/ruins.</li>
-                <li><strong>Lawless & Pragmatic:</strong> No formal laws; survival dictates actions, disputes settled by strength/negotiation.</li>
-                <li><strong>Resource Tension:</strong> Fierce competition for water, food, ancient artifacts.</li>
-                <li><strong>Distrustful & Insular:</strong> Deep distrust of outsiders; occasional secret trade.</li>
-                <li><strong>Transport/Equipment:</strong> Mechanical contraptions from ruins; desert robes augmented with artifacts.</li>
-            </ul>
-
-            <h3>4. Values</h3>
-            <ul>
-                <li><strong>Survivalism:</strong> Survival is the ultimate priority.</li>
-                <li><strong>Freedom & Independence:</strong> Detest external control.</li>
-                <li><strong>Ambivalence to Knowledge:</strong> Ruins offer advantages but are viewed with suspicion; some lore is taboo.</li>
-                <li><strong>Practicality:</strong> Tangible results valued over words.</li>
-            </ul>
-            
-            <h3>5. Al-Azuma Major Power Systems</h3>
-            <details>
-                <summary>Gunslinger (총잡이)</summary>
-                <p>Extreme gun-handling style using Ruh-engraved bullets in modified revolvers; a symbolic role.</p>
-                <h4>Ruh</h4>
-                <ul>
-                    <li><strong>Source:</strong> Unique 'ink' energy refined from mana via the soul.</li>
-                    <li><strong>Medium:</strong> Carries user's will, emotions, story fragments. Potency depends on soul/mana control/stories.</li>
-                    <li><strong>Engraving:</strong> Used to inscribe patterns on objects (bullets, weapons), manifesting potent effects.</li>
-                </ul>
-                <h4>Gunslinger Ranks (Engraving Skill)</h4>
-                 <ul>
-                    <li><strong>Single-Stroke Engraver:</strong> Basic enhancements (1-3 strokes).</li>
-                    <li><strong>Multi-Stroke Artisan:</strong> Practical effects (4-7 strokes).</li>
-                    <li><strong>Complex-Stroke Master:</strong> Complex effects, manifest concepts (8-12+ strokes).</li>
-                </ul>
-            </details>
-             <details>
-                <summary>Echo Weaver (잔향사)</summary>
-                <p>Sense, interpret, and manifest 'Echoes' (past reverberations), weaving illusion and reality.</p>
-                <h4>Echo (잔향)</h4>
-                <ul>
-                    <li><strong>Source:</strong> 'Scars' left by intense events; strong in Al-Azuma.</li>
-                    <li><strong>Attunement:</strong> Awakened via extreme rituals, they 'listen' to echoes, 'attune' minds, and 'weave' them into reality.</li>
-                </ul>
-                <h4>Echo Intervention: Effects</h4>
-                <ul>
-                    <li>Mirage Manifestation / Sensory Disruption.</li>
-                    <li>Limited Past Projection.</li>
-                    <li>Emotional Wave Transmission.</li>
-                    <li>Substantial Echo (Advanced, minor physical interference).</li>
-                </ul>
-                 <h4>Costs and Dangers</h4>
-                <ul>
-                    <li>Extreme Mental Strain.</li>
-                    <li>Echo Corruption (mental damage).</li>
-                    <li>Reality Perception Distortion.</li>
-                </ul>
-                 <h4>Echo Weaver Ranks</h4>
-                 <ul>
-                    <li><strong>Empath:</strong> Feels echoes, lacks control.</li>
-                    <li><strong>Weaver:</strong> Weaves basic effects.</li>
-                    <li><strong>Artist:</strong> Masterful, complex phenomena ('Art of Echoes').</li>
-                </ul>
-            </details>
+             <div class="lang-en">
+                <h1>🏜️ Al-Azuma - Tomb of Forgotten Greatness</h1>
+                <p>Vast desert beyond the Republic, holding colossal ruins of a hyper-ancient civilization. Inhabited by Azmari. Some Republic tech originated here; generally seen as a dangerous, secret-filled expanse.</p>
+                <h3>1. Living Environment</h3>
+                <ul><li><strong>Extreme Climate:</strong> Scorching days, freezing nights. Powerful sandstorms (Samum). Scarce water (oases, ruins).</li><li><strong>Desolate Terrain:</strong> Red sand dunes, badlands, mesas, buttes, canyons, intertwined with massive ancient ruins.</li></ul>
+                <h3>2. Primary Species</h3>
+                <ul><li><strong>Azmari:</strong> Taller, slender, graceful yet hardy physique; Desert adapted (skin, eyes, temperature resistance); Long lifespan, ancient traces; Long, pointed ears for sensitive hearing; Technologically adept dexterity.</li></ul>
+                <h3>3. Lifestyle and Social Structure</h3>
+                <ul><li><strong>Solitary & Sparse:</strong> Many wanderers; some settlements near oases/ruins.</li><li><strong>Lawless & Pragmatic:</strong> No formal laws; survival dictates actions, disputes settled by strength/negotiation.</li><li><strong>Resource Tension:</strong> Fierce competition for water, food, ancient artifacts.</li><li><strong>Distrustful & Insular:</strong> Deep distrust of outsiders; occasional secret trade.</li><li><strong>Transport/Equipment:</strong> Mechanical contraptions from ruins; desert robes augmented with artifacts.</li></ul>
+                <h3>4. Values</h3>
+                <ul><li><strong>Survivalism:</strong> Survival is the ultimate priority.</li><li><strong>Freedom & Independence:</strong> Detest external control.</li><li><strong>Ambivalence to Knowledge:</strong> Ruins offer advantages but are viewed with suspicion; some lore is taboo.</li><li><strong>Practicality:</strong> Tangible results valued over words.</li></ul>
+                <h3>5. Al-Azuma Major Power Systems</h3>
+                <details>
+                    <summary>Gunslinger (총잡이)</summary>
+                    <p>Extreme gun-handling style using Ruh-engraved bullets in modified revolvers; a symbolic role.</p>
+                    <h4>Ruh</h4>
+                    <ul><li><strong>Source:</strong> Unique 'ink' energy refined from mana via the soul.</li><li><strong>Medium:</strong> Carries user's will, emotions, story fragments. Potency depends on soul/mana control/stories.</li><li><strong>Engraving:</strong> Used to inscribe patterns on objects (bullets, weapons), manifesting potent effects.</li></ul>
+                    <h4>Gunslinger Ranks (Engraving Skill)</h4>
+                     <ul><li><strong>Single-Stroke Engraver:</strong> Basic enhancements (1-3 strokes).</li><li><strong>Multi-Stroke Artisan:</strong> Practical effects (4-7 strokes).</li><li><strong>Complex-Stroke Master:</strong> Complex effects, manifest concepts (8-12+ strokes).</li></ul>
+                </details>
+                 <details>
+                    <summary>Echo Weaver (잔향사)</summary>
+                    <p>Sense, interpret, and manifest 'Echoes' (past reverberations), weaving illusion and reality.</p>
+                    <h4>Echo (잔향)</h4>
+                    <ul><li><strong>Source:</strong> 'Scars' left by intense events; strong in Al-Azuma.</li><li><strong>Attunement:</strong> Awakened via extreme rituals, they 'listen' to echoes, 'attune' minds, and 'weave' them into reality.</li></ul>
+                    <h4>Echo Intervention: Effects</h4>
+                    <ul><li>Mirage Manifestation / Sensory Disruption.</li><li>Limited Past Projection.</li><li>Emotional Wave Transmission.</li><li>Substantial Echo (Advanced, minor physical interference).</li></ul>
+                     <h4>Costs and Dangers</h4>
+                    <ul><li>Extreme Mental Strain.</li><li>Echo Corruption (mental damage).</li><li>Reality Perception Distortion.</li></ul>
+                     <h4>Echo Weaver Ranks</h4>
+                     <ul><li><strong>Empath:</strong> Feels echoes, lacks control.</li><li><strong>Weaver:</strong> Weaves basic effects.</li><li><strong>Artist:</strong> Masterful, complex phenomena ('Art of Echoes').</li></ul>
+                </details>
+             </div>
+             <div class="lang-ko">
+                <h1>🏜️ 알 아즈마 - 잊혀진 위대함의 무덤</h1>
+                 <p>공화국 너머의 광대한 사막, 초고대 문명의 거대한 유적을 품고 있습니다. 아즈마리가 거주하며, 일부 공화국 기술이 이곳에서 유래했습니다. 일반적으로 위험하고 비밀이 가득한 지역으로 여겨집니다.</p>
+                 <h3>1. 거주 환경</h3>
+                 <ul><li><strong>극한 기후:</strong> 타는 듯한 낮, 얼어붙는 밤. 강력한 모래폭풍(사뭄). 희소한 물(오아시스, 유적).</li><li><strong>황량한 지형:</strong> 붉은 모래 언덕, 황무지, 메사, 뷰트, 협곡이 거대한 고대 유적과 뒤섞여 있습니다.</li></ul>
+                 <h3>2. 주요 종족</h3>
+                 <ul><li><strong>아즈마리:</strong> 키가 크고 날씬하며 우아하면서도 강인한 체격; 사막 적응(피부, 눈, 온도 저항); 긴 수명, 고대의 흔적; 민감한 청력을 위한 길고 뾰족한 귀; 기술적으로 능숙한 손재주.</li></ul>
+                 <h3>3. 생활 방식 및 사회 구조</h3>
+                 <ul><li><strong>고독 & 희박:</strong> 많은 방랑자; 오아시스/유적 근처 일부 정착지.</li><li><strong>무법 & 실용:</strong> 공식적인 법 없음; 생존이 행동을 결정하고, 분쟁은 힘/협상으로 해결.</li><li><strong>자원 긴장:</strong> 물, 식량, 고대 유물에 대한 치열한 경쟁.</li><li><strong>불신 & 고립:</strong> 외부인에 대한 깊은 불신; 가끔 비밀 거래.</li><li><strong>교통/장비:</strong> 유적에서 나온 기계 장치; 유물로 강화된 사막 로브.</li></ul>
+                 <h3>4. 가치관</h3>
+                 <ul><li><strong>생존주의:</strong> 생존이 최우선 순위.</li><li><strong>자유 & 독립:</strong> 외부 통제 혐오.</li><li><strong>지식에 대한 양가감정:</strong> 유적은 이점을 제공하지만 의심의 눈초리를 받으며, 일부 지식은 금기시됩니다.</li><li><strong>실용성:</strong> 말보다 실질적인 결과를 중시.</li></ul>
+                 <h3>5. 알 아즈마 주요 이능 체계</h3>
+                <details>
+                    <summary>총잡이 (Gunslinger)</summary>
+                    <p>개조된 리볼버에 루(Ruh)가 각인된 총알을 사용하는 극단적인 총기 다루기 스타일; 상징적인 역할.</p>
+                    <h4>루 (Ruh)</h4>
+                    <ul><li><strong>기원:</strong> 영혼을 통해 마나에서 정제된 독특한 '잉크' 에너지.</li><li><strong>매개체:</strong> 사용자의 의지, 감정, 이야기 조각을 운반. 잠재력은 영혼/마나 제어/이야기에 달려 있음.</li><li><strong>각인:</strong> 물체(총알, 무기)에 패턴을 새겨 강력한 효과를 발현시키는 데 사용.</li></ul>
+                    <h4>총잡이 등급 (각인 기술)</h4>
+                     <ul><li><strong>단일 획 각인사:</strong> 기본 강화 (1~3획).</li><li><strong>다중 획 장인:</strong> 실용적 효과 (4~7획).</li><li><strong>복합 획 거장:</strong> 복잡한 효과, 개념 발현 (8~12+획).</li></ul>
+                </details>
+                 <details>
+                    <summary>잔향사 (Echo Weaver)</summary>
+                    <p>'잔향'(과거의 울림)을 감지, 해석, 발현하여 환상과 현실을 엮습니다.</p>
+                    <h4>잔향 (Echo)</h4>
+                    <ul><li><strong>기원:</strong> 강렬한 사건이 남긴 '흉터'; 알 아즈마에서 강함.</li><li><strong>조율:</strong> 극한의 의식을 통해 깨어나 잔향을 '듣고', 정신을 '조율'하며, 현실로 '엮어냅니다'.</li></ul>
+                    <h4>잔향 간섭: 효과</h4>
+                    <ul><li>신기루 발현 / 감각 교란.</li><li>제한적인 과거 투영.</li><li>감정 파동 전이.</li><li>실체화된 메아리 (고급, 미약한 물리적 간섭).</li></ul>
+                     <h4>대가 및 위험성</h4>
+                    <ul><li>극심한 정신력 소모.</li><li>잔향에 의한 침식 (정신적 손상).</li><li>현실 감각 왜곡.</li></ul>
+                     <h4>잔향사 등급</h4>
+                     <ul><li><strong>공감자:</strong> 잔향을 느끼지만 통제 부족.</li><li><strong>직조자:</strong> 기본 효과 직조.</li><li><strong>예술가:</strong> 거장, 복잡한 현상 ('잔향의 예술').</li></ul>
+                </details>
+             </div>
         </div>
-
+        
         <div id="organizations" class="section">
-            <h1>⚜️ Organizations</h1>
-            <p>Select a specific organization or group from the sidebar menu to view details.</p>
+            <div class="lang-en">
+                <h1>⚜️ Organizations</h1>
+                <p>Select a specific organization or group from the sidebar menu to view details.</p>
+            </div>
+            <div class="lang-ko">
+                <h1>⚜️ 조직</h1>
+                <p>사이드바 메뉴에서 특정 조직이나 그룹을 선택하여 자세한 내용을 확인하세요.</p>
+            </div>
         </div>
         
         <div id="lumina-org" class="section">
-            <h1>⚜️ Lumina Organization List</h1>
-            <details class="org-card">
-                <summary>🗡️ Luminous Knights</summary>
-                <p><span class="tag tag-blue">Imperial/Elite</span> Emperor's personal guard, Elite Aura Knights, Unwavering loyalty, Symbol of Imperial might, Disciplined & Direct.</p>
-                <h4>Overview & Philosophy</h4>
-                <ul>
-                    <li>Emperor's personal elite knight order, embodying Imperial authority.</li>
-                    <li>Dedicated to the Emperor's will and "Aurea's Light Manifest".</li>
-                </ul>
-                 <h4>Key Characteristics & Operations</h4>
-                 <ul>
-                    <li>Emperor's Sword & Shield: Guards Emperor, defends capital, executes decrees.</li>
-                    <li>Elite Combat Prowess: Empire's most skilled Aura users, superior training.</li>
-                    <li>Imperial Authority Enforcement: Deployed for critical missions.</li>
-                    <li>Unwavering Loyalty: Direct fealty to the Emperor.</li>
-                </ul>
-                 <h4>Internal Culture & Composition</h4>
-                 <ul>
-                    <li>Extreme Discipline & Hierarchy: Strict protocols, intense competition.</li>
-                    <li>Meritocratic Selection (Relative): Talent can allow advancement, especially under Aurelia.</li>
-                    <li>Pride & Duty Driven: Fanatical sense of duty.</li>
-                </ul>
-                 <h4>Reputation & Approach</h4>
-                 <ul>
-                    <li>Symbol of Imperial Power: Revered and feared.</li>
-                    <li>Uncompromising & Direct: Favors overwhelming force, known for ruthlessness.</li>
-                </ul>
-            </details>
-            <details class="org-card">
-                <summary>🌟 Aurean Magisterium (Mage Tower)</summary>
-                <p><span class="tag tag-blue">Imperial/Academic</span> Sole sanctioned magical institution, Eccentric wizards, Results-oriented research, Unpredictable innovation (and accidents), Talent over hierarchy.</p>
-                 <h4>Overview & Philosophy</h4>
-                <ul>
-                    <li>Officially the sole magical institution, practically a loosely managed collective.</li>
-                    <li>Driven by intellectual curiosity and mastery; results valued over methods.</li>
-                </ul>
-                 <h4>Key Characteristics & Operations</h4>
-                 <ul>
-                    <li>Results-Oriented Imperial Oversight: Control via objectives, resources, and intervention in major issues.</li>
-                    <li>Talent Over Hierarchy: Influence often depends on talent/research, not just rank.</li>
-                    <li>Unpredictable Innovation & Accidents: Fosters breakthroughs but prone to mishaps.</li>
-                    <li>Restricted Core Knowledge: Fundamental/dangerous knowledge controlled, but application is freer.</li>
-                </ul>
-                 <h4>Internal Culture & Composition</h4>
-                 <ul>
-                    <li>Tolerated Eccentricity: Genius excuses odd behavior; individualistic focus.</li>
-                    <li>Intense Rivalry & Collaboration: Competition alongside spontaneous collaborations.</li>
-                    <li>Meritocracy of Brilliance (and Loudness): Advancement can be chaotic; loyalty to magic often stronger than to Empire.</li>
-                </ul>
-                 <h4>Reputation & Approach</h4>
-                 <ul>
-                    <li>Double-Edged Sword: Valued for power, distrusted for unpredictability.</li>
-                    <li>Externally Unpredictable: Seen as powerful but baffling.</li>
-                    <li>Approach: Often chaotic, can achieve incredible feats but easily sidetracked.</li>
-                </ul>
-            </details>
-            <details class="org-card">
-                <summary>🏰 Album Ultima</summary>
-                <p><span class="tag tag-blue">Imperial/Border</span> Northernmost fortress/march, Defends against Utlanders, Led by practical Margrave Agripa, Resilient community, Harsh environment survival.</p>
-                <h4>Overview & Philosophy</h4>
-                <ul>
-                    <li>Northernmost march/fortress ("Last White Bulwark"), ruled by Margrave Titus Agripa.</li>
-                    <li>Philosophy based on survival, defense, "Hold the line," resilience, local loyalty.</li>
-                </ul>
-                 <h4>Key Characteristics & Operations</h4>
-                 <ul>
-                    <li>Frontier Defense Line: Repel Utlanders, constant patrols/skirmishes.</li>
-                    <li>Harsh Environment Operations: Survival in brutal winters/terrain.</li>
-                    <li>Direct Rule of the Margrave: Practical, straightforward leadership.</li>
-                    <li>Relative Autonomy: Less interference from capital, relies on Margrave's judgment.</li>
-                </ul>
-                 <h4>Internal Culture & Composition</h4>
-                 <ul>
-                    <li>Resilient Community: Soldiers/settlers with strong bonds, value practical skills.</li>
-                    <li>Influence of Titus Agripa: Jovial, magnanimous, practical culture.</li>
-                    <li>Survival-Focused Culture: Values skills, prowess, trust over sophistication.</li>
-                </ul>
-                 <h4>Reputation & Approach</h4>
-                 <ul>
-                    <li>Empire Perception: Essential defense but rough/uncouth; Agripa seen as loyal but blunt.</li>
-                    <li>Utlander Perception: Hateful obstacle, 'Old Boar' (Titus) feared.</li>
-                    <li>Approach: Defensive/reactive, resolves issues with strength.</li>
-                </ul>
-            </details>
-             <details class="org-card">
-                <summary>⚔️ Duchy of Magna</summary>
-                <p><span class="tag tag-blue">Imperial/Border</span> Conservative NE Duchy (borders Republic/Manseru), Ruled by Duke Lucius Magna, Traditionalist/Patriarchal/Xenophobic, Strict control, Opposes change.</p>
-                 <h4>Overview & Philosophy</h4>
-                <ul>
-                    <li>Strategic NE territory, borders Republic/Manseru, ruled by Duke Lucius Magna.</li>
-                    <li>Philosophy: Absolutism, tradition, hierarchy. Views outsiders as 'barbaric', reforms as 'unlawful'.</li>
-                </ul>
-                 <h4>Key Characteristics & Operations</h4>
-                 <ul>
-                    <li>Strict Border Control: Minimal external interaction.</li>
-                    <li>Absolute Internal Rule: Duke holds absolute power, dissent suppressed.</li>
-                    <li>Traditional Military: Values loyalty/lineage, conservative tactics.</li>
-                    <li>Closed Economy: Rejects external tech/commerce.</li>
-                </ul>
-                 <h4>Internal Culture & Composition</h4>
-                 <ul>
-                    <li>Culture: Extreme conservatism, patriarchy, xenophobia; fear/respect for Duke.</li>
-                    <li>Composition: Mostly human; ruling class loyal to Duke; commoners under strict control.</li>
-                </ul>
-                 <h4>Reputation & Approach</h4>
-                 <ul>
-                    <li>Reputation: 'Bastion of tradition' vs. 'outdated/oppressive'. Seen as 'hostile/isolationist' by neighbors.</li>
-                    <li>Approach: Isolationist/defensive, maintains status quo, opposes reforms.</li>
-                </ul>
-            </details>
+            <div class="lang-en">
+                <h1>⚜️ Lumina Organization List</h1>
+                <details class="org-card">
+                    <summary>🗡️ Luminous Knights</summary>
+                    <div class="tags"><span class="tag tag-blue">Imperial/Elite</span><span class="tag">Loyal</span><span class="tag">Disciplined</span></div>
+                    <p>Emperor's personal elite knight order, embodying Imperial authority and martial perfection. Unwavering loyalty and overwhelming force.</p>
+                </details>
+                <details class="org-card">
+                    <summary>🌟 Aurean Magisterium (Mage Tower)</summary>
+                    <div class="tags"><span class="tag tag-blue">Imperial/Academic</span><span class="tag">Eccentric</span><span class="tag">Innovative</span></div>
+                    <p>Officially the sole magical institution. Values results over methods, fosters brilliance (and accidents).</p>
+                </details>
+                <details class="org-card">
+                    <summary>🏰 Album Ultima</summary>
+                    <div class="tags"><span class="tag tag-blue">Imperial/Border</span><span class="tag">Resilient</span><span class="tag">Practical</span></div>
+                    <p>Northernmost march/fortress. Defends against Utlanders, ruled by the practical Margrave Titus Agripa. Resilient and loyal.</p>
+                </details>
+                <details class="org-card">
+                    <summary>⚔️ Duchy of Magna</summary>
+                    <div class="tags"><span class="tag tag-blue">Imperial/Border</span><span class="tag">Conservative</span><span class="tag">Xenophobic</span></div>
+                    <p>Strategic NE territory. Ruled by Duke Lucius Magna. Values tradition, order, and absolutism. Opposes change.</p>
+                </details>
+            </div>
+            <div class="lang-ko">
+                <h1>⚜️ 루미나 조직 목록</h1>
+                 <details class="org-card">
+                    <summary>🗡️ 루미너스 기사단</summary>
+                    <div class="tags"><span class="tag tag-blue">제국/정예</span><span class="tag">충성</span><span class="tag">규율</span></div>
+                    <p>황제 직속 정예 기사단, 제국 권위와 무력의 상징. 흔들림 없는 충성심과 압도적인 무력을 추구합니다.</p>
+                </details>
+                <details class="org-card">
+                    <summary>🌟 아우레안 마기스테리움 (마탑)</summary>
+                    <div class="tags"><span class="tag tag-blue">제국/학술</span><span class="tag">괴짜</span><span class="tag">혁신</span></div>
+                    <p>유일한 공인 마법 기관. 방법보다 결과를 중시하며, 천재성(과 사고)을 육성합니다.</p>
+                </details>
+                <details class="org-card">
+                    <summary>🏰 알붐 울티마</summary>
+                    <div class="tags"><span class="tag tag-blue">제국/국경</span><span class="tag">강인</span><span class="tag">실용</span></div>
+                    <p>최북단 요새/변경주. 우트란더를 방어하며, 실용적인 티투스 아그리파 변경백이 통치합니다. 강인하고 충성스럽습니다.</p>
+                </details>
+                <details class="org-card">
+                    <summary>⚔️ 마그나 공작가</summary>
+                    <div class="tags"><span class="tag tag-blue">제국/국경</span><span class="tag">보수</span><span class="tag">배타</span></div>
+                    <p>북동부 전략 영지. 루키우스 마그나 공작이 통치합니다. 전통, 질서, 절대주의를 중시하며 변화에 반대합니다.</p>
+                </details>
+            </div>
         </div>
-        
+
         <div id="republic-org" class="section">
-            <h1>⚜️ Republic Organization List</h1>
-             <details class="org-card">
-                <summary>🏛️ Vouli tōn Poleōn</summary>
-                <p><span class="tag tag-green">Republic/Legislative</span> Wealth-based unicameral legislature, Represents enfranchised citizens, Selects Prime Minister, Focuses on economic growth & stability.</p>
-                 <h4>Overview & Philosophy</h4>
-                <ul>
-                    <li>Unicameral legislature, represents wealthy citizens, selects PM.</li>
-                    <li>Based on timocracy (wealth = value); goals are economic growth, tech, stability.</li>
-                </ul>
-                 <h4>Key Characteristics & Operations</h4>
-                 <ul>
-                    <li>Structure: Unicameral.</li>
-                    <li>Membership: Bouleutēs (6-year terms), strict property qualifications for voting/office.</li>
-                    <li>Elections: Staggered (1/3 every 2 years).</li>
-                    <li>PM Selection: Majority party leader appointed after vote.</li>
-                    <li>Legislation: Commerce, industry, tech, tax, property. Budget approval/oversight.</li>
-                    <li>Process: Emphasizes economic impact; stakeholders participate.</li>
-                </ul>
-                 <h4>Internal Culture & Composition</h4>
-                 <ul>
-                    <li>Culture: Pragmatic, results-oriented; wealth/influence key.</li>
-                    <li>Composition: Wealthy Pherians/Chthonians (landowners, factory owners, etc.).</li>
-                </ul>
-                 <h4>Reputation & Approach</h4>
-                 <ul>
-                    <li>Reputation: Legitimate but wealthy-focused (internal); pragmatic, tech-advanced but stratified (external).</li>
-                    <li>Approach: Maintains economic stability, promotes growth, manages relations pragmatically.</li>
-                </ul>
-            </details>
+            <div class="lang-en">
+                <h1>⚜️ Republic Organization List</h1>
+                 <details class="org-card">
+                    <summary>🏛️ Vouli tōn Poleōn</summary>
+                     <div class="tags"><span class="tag tag-green">Republic/Legislative</span><span class="tag">Wealth-based</span><span class="tag">Economic Focus</span></div>
+                    <p>The unicameral legislative body. Represents wealthy citizens, selects PM, focuses on economic growth and stability.</p>
+                </details>
+                <details class="org-card">
+                    <summary>🔬 National Defense Research Institute (Technium)</summary>
+                     <div class="tags"><span class="tag tag-green">Republic/Research</span><span class="tag">Mythos Engineering</span><span class="tag">Confidential</span></div>
+                    <p>Core defense research. Focuses on Mythos Engineering (Logos Taxis) and Methodos creation. Prioritizes results and confidentiality.</p>
+                </details>
+                <details class="org-card">
+                    <summary>☕ To Kafenio Klamp</summary>
+                     <div class="tags"><span class="tag tag-green">Republic/Independent</span><span class="tag">Intellectual</span><span class="tag">Critique</span></div>
+                    <p>Independent social club critiquing Republic issues (plutocracy, inequality) through discussion, not direct action. Cautious operation.</p>
+                </details>
+            </div>
+            <div class="lang-ko">
+                <h1>⚜️ 공화국 조직 목록</h1>
+                  <details class="org-card">
+                    <summary>🏛️ 볼리 톤 폴레온 (의회)</summary>
+                     <div class="tags"><span class="tag tag-green">공화국/입법</span><span class="tag">부에 기반</span><span class="tag">경제 중심</span></div>
+                    <p>단원제 입법 기관. 부유한 시민을 대표하고, 총리를 선출하며, 경제 성장과 안정에 집중합니다.</p>
+                </details>
+                <details class="org-card">
+                    <summary>🔬 국방 연구소 (테크니움)</summary>
+                     <div class="tags"><span class="tag tag-green">공화국/연구</span><span class="tag">뮈토스 엔지니어링</span><span class="tag">기밀</span></div>
+                    <p>핵심 국방 연구. 뮈토스 엔지니어링(로고스 탁시스) 및 메소도스 개발에 중점. 결과와 기밀 유지를 우선시합니다.</p>
+                </details>
+                <details class="org-card">
+                    <summary>☕ 토 카페니오 클럽</summary>
+                     <div class="tags"><span class="tag tag-green">공화국/독립</span><span class="tag">지식인</span><span class="tag">비판</span></div>
+                    <p>공화국 문제(배금주의, 불평등)를 직접 행동이 아닌 토론을 통해 비판하는 독립 사교 클럽. 신중하게 운영됩니다.</p>
+                </details>
+            </div>
         </div>
 
         <div id="al-mizan" class="section">
-            <h1>👁️‍🗨️ Al-Mizan</h1>
-             <h4>Overview & Philosophy</h4>
-            <ul>
-                <li>Ancient secret society managing/eliminating uncontrollable Animarium stories (Legend+).</li>
-                <li>Witnessed Al-Azuma's fall; prioritizes global balance by neutralizing threats.</li>
-            </ul>
-             <h4>Key Characteristics & Operations</h4>
-            <ul>
-                <li>Threat Monitoring: Detects dangerous stories.</li>
-                <li>Scaled Intervention: From influence to elimination ('Balancers').</li>
-                <li>Watchful Presence: Monitors power hubs (Empire, Republic, Manseru).</li>
-                <li>Covert Network: Hidden resources/intelligence.</li>
-            </ul>
-             <h4>Internal Culture & Composition</h4>
-            <ul>
-                <li>Absolute Secrecy: Compartmentalized, hidden lives.</li>
-                <li>Calculated Judgment: Focuses on balance over ideology.</li>
-                <li>Skilled Operatives: Diverse, discreet, effective.</li>
-            </ul>
-             <h4>Reputation & Approach</h4>
-            <ul>
-                <li>Publicly Invisible: Unknown; myth or unexplained events.</li>
-                <li>Reactive & Measured: Acts when thresholds crossed, aims for balance.</li>
-            </ul>
+            <div class="lang-en">
+                <h1>👁️‍🗨️ Al-Mizan</h1>
+                <p>Ancient secret society managing uncontrollable Animarium stories (Legend+), prioritizing global balance by neutralizing threats.</p>
+                <h4>Key Characteristics & Operations</h4>
+                <ul><li>Threat Monitoring: Detects dangerous stories.</li><li>Scaled Intervention: From influence to elimination ('Balancers').</li><li>Watchful Presence: Monitors power hubs.</li><li>Covert Network: Hidden resources/intelligence.</li></ul>
+                <h4>Internal Culture & Composition</h4>
+                <ul><li>Absolute Secrecy: Compartmentalized, hidden lives.</li><li>Calculated Judgment: Focuses on balance over ideology.</li><li>Skilled Operatives: Diverse, discreet, effective.</li></ul>
+                <h4>Reputation & Approach</h4>
+                <ul><li>Publicly Invisible: Unknown; myth or unexplained events.</li><li>Reactive & Measured: Acts when thresholds crossed, aims for balance.</li></ul>
+            </div>
+            <div class="lang-ko">
+                <h1>👁️‍🗨️ 알 미잔</h1>
+                 <p>통제 불가능한 아니마리움 이야기(전설급 이상)를 관리/제거하며, 위협을 중화하여 세계 균형을 우선시하는 고대 비밀 결사.</p>
+                <h4>주요 특징 및 활동</h4>
+                <ul><li>위협 감시: 위험한 이야기를 탐지합니다.</li><li>단계적 개입: 영향력 행사부터 제거('균형자')까지.</li><li>감시망 구축: 권력 중심지를 감시합니다.</li><li>비밀 네트워크: 숨겨진 자원/정보망.</li></ul>
+                <h4>내부 문화 및 구성</h4>
+                <ul><li>절대 비밀: 구획화된 정보, 숨겨진 삶.</li><li>계산된 판단: 이념보다 균형에 집중합니다.</li><li>숙련된 요원: 다양하고, 신중하며, 효과적입니다.</li></ul>
+                <h4>평판 및 접근 방식</h4>
+                <ul><li>대외적으로 미존재: 알려지지 않음; 신화나 설명되지 않는 사건으로 치부됨.</li><li>반응적이고 신중함: 임계점을 넘었을 때 행동하며, 균형을 목표로 합니다.</li></ul>
+            </div>
         </div>
-        
+
         <div id="npcs" class="section">
-            <h1>👤 NPCs</h1>
-            <p>Select a specific NPC group from the sidebar menu to view details.</p>
+             <div class="lang-en">
+                <h1>👤 NPCs</h1>
+                <p>Select a specific NPC group from the sidebar menu to view details.</p>
+             </div>
+             <div class="lang-ko">
+                <h1>👤 NPC 목록</h1>
+                <p>사이드바 메뉴에서 특정 NPC 그룹을 선택하여 자세한 내용을 확인하세요.</p>
+             </div>
         </div>
 
         <div id="lumina-npcs" class="section">
-            <h1>👤 Lumina NPC List</h1>
-            <details class="npc-card">
-                <summary>👑 Aurelia Lumina Rex/Ruina (17/F)</summary>
-                <div>
-                    <span class="tag tag-red">Empress</span>
-                    <span class="tag">Aura Master</span>
-                    <span class="tag">Reformer</span>
-                </div>
-                <p>Abundant blonde hair, deep blue eyes. Decisive, Intelligent, Ambitious, Unyielding, Charismatic. First Empress, seeks merit-based reform.</p>
-                <ul>
-                    <li><strong>Occupation:</strong> Emperor of the Lumina Empire.</li>
-                    <li><strong>Abilities:</strong> Aura Master (Golden Aura), high agility/swordsmanship.</li>
-                    <li><strong>Animarium:</strong> Rulebreaker (Epic) - Became first Empress through ability/will.</li>
-                    <li><strong>Quote:</strong> "I am the Emperor first, a woman second. Proven by ability, judged by results."</li>
-                </ul>
-            </details>
-            <details class="npc-card">
-                <summary>👑 Fabius Valerius (26/M)</summary>
-                 <div>
-                    <span class="tag tag-blue">Advisor</span>
-                    <span class="tag">Noble</span>
-                    <span class="tag">Loyal (Aurelia)</span>
-                </div>
-                <p>Neatly styled dark hair, sharp dark eyes. Analytical, Loyal (Aurelia), Insightful, Calm, Composed. Court Noble & Strategic Advisor.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Court Noble, Strategic Advisor.</li>
-                    <li><strong>Abilities:</strong> Aura User (basic), primarily intellectual.</li>
-                    <li><strong>Animarium:</strong> Architect of Victory (Fairy Tale) - Devised key logistical plan.</li>
-                    <li><strong>Quote:</strong> "Sentiment has its place, Your Majesty, but strategy requires cold logic."</li>
-                </ul>
-            </details>
-             <details class="npc-card">
-                <summary>🗡️ Cassian Valerius (48/M)</summary>
-                <div>
-                    <span class="tag tag-grey">Commander</span>
-                    <span class="tag">Aura Master</span>
-                    <span class="tag">Al-Mizan</span>
-                </div>
-                <p>Short, neat grey hair, sharp steel-grey eyes. Disciplined, Pragmatic, Secretive, Calm, Burdened. Luminous Knights Master & Secret Al-Mizan Overseer.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Luminous Knights Commander, Al-Mizan Regional Overseer.</li>
-                    <li><strong>Abilities:</strong> Aura Master (Defensive/Nullification), Master Swordsman.</li>
-                    <li><strong>Animarium:</strong> Guardian of the Silent Truth (Epic) - Holds devastating secrets.</li>
-                    <li><strong>Quote:</strong> "Order must be maintained. At any cost."</li>
-                </ul>
-            </details>
-             <details class="npc-card">
-                <summary>🗡️ Seraphina Grata (23/F)</summary>
-                <div>
-                    <span class="tag tag-red">Vice-Commander</span>
-                    <span class="tag">Elite Knight</span>
-                    <span class="tag">Loyal (Aurelia)</span>
-                </div>
-                <p>Bright, fiery red hair, expressive emerald green eyes. Cheerful, Energetic, Loyal (Aurelia), Sharp-witted, Fierce. Vice-master of Luminous Knights.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Vice-Commander of Luminous Knights.</li>
-                    <li><strong>Abilities:</strong> High Elite Knight (Speed-based Aura/Sword).</li>
-                    <li><strong>Animarium:</strong> Aurelia's Comet (Tale) - Rose rapidly due to talent/Empress's recognition.</li>
-                    <li><strong>Quote:</strong> "Speed is the best defense! And offense! Basically, speed is the best!"</li>
-                </ul>
-            </details>
-             <details class="npc-card">
-                <summary>🗡️ Silas Tacitus (29/M)</summary>
-                <div>
-                    <span class="tag">Knight</span>
-                    <span class="tag tag-grey">Calculating</span>
-                    <span class="tag">Opportunistic</span>
-                </div>
-                <p>Wavy dark brown hair, dark, watchful eyes. Calculating, Observant, Guarded, Opportunistic. Rank-and-File Knight (Elite Knight level), pursues hidden agenda.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Luminous Knight (Rank-and-File).</li>
-                    <li><strong>Abilities:</strong> Elite Knight (Adequate control, rarely displays full potential).</li>
-                    <li><strong>Animarium:</strong> Shadow Weaver (Folktale) - Spread false rumor to secure position.</li>
-                    <li><strong>Quote:</strong> "Loyalty is a valuable shield, wouldn't you agree?"</li>
-                </ul>
-            </details>
-             <details class="npc-card">
-                <summary>🗡️ Vibia Magna (24/F)</summary>
-                <div>
-                    <span class="tag">Knight</span>
-                    <span class="tag tag-grey">Kuudere</span>
-                    <span class="tag">Skilled</span>
-                    <span class="tag">Magna Family</span>
-                </div>
-                <p>Long, straight silver-white hair, piercing ice-blue eyes. Kuudere, Stoic, Disciplined, Aloof. Highly Skilled Luminous Knight (Elite proficiency). Eldest daughter of Duke Lucius Magna.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Luminous Knight (Rank-and-File).</li>
-                    <li><strong>Abilities:</strong> Elite Knight (Exceptional control/efficiency).</li>
-                    <li><strong>Animarium:</strong> Eye of the Storm (Tale) - Remained calm/effective during chaos.</li>
-                    <li><strong>Quote:</strong> "Acknowledged."</li>
-                </ul>
-            </details>
-             <details class="npc-card">
-                <summary>🌟 Elara Mella (20/F)</summary>
-                <div>
-                    <span class="tag tag-purple">Tower Master</span>
-                    <span class="tag">Sorcerer</span>
-                    <span class="tag">Genius</span>
-                    <span class="tag">Awkward</span>
-                </div>
-                <p>Long, ink-blue hair, large grey eyes. Reclusive, Brilliant (theory), Curious, Socially Awkward. Tower Master (Sorcerer 7th Floor), genius focused on mana theory.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Tower Master of Aurean Magisterium.</li>
-                    <li><strong>Abilities:</strong> Sorcerer (7th Floor, Theoretical/Mana Analysis).</li>
-                    <li><strong>Animarium:</strong> Mana Resonance Tuner (Tale) - Resolved surges by understanding mana flows.</li>
-                    <li><strong>Quote:</strong> "The elegance of the underlying equation is… *beautiful*."</li>
-                </ul>
-            </details>
-             <details class="npc-card">
-                <summary>🌟 Livia Modesta (30/F)</summary>
-                 <div>
-                    <span class="tag tag-purple">Administrator</span>
-                    <span class="tag">Mage</span>
-                    <span class="tag">Efficient</span>
-                </div>
-                <p>Dark brown hair (bun), sharp brown eyes. Calm, Efficient, Pragmatic, Organized. Chief Administrator of Magisterium (Mage 6th Floor).</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Chief Administrator of Aurean Magisterium.</li>
-                    <li><strong>Abilities:</strong> Mage (6th Floor, Organizational/Administrative magic).</li>
-                    <li><strong>Animarium:</strong> Order from Chaos (Tale) - Restructured a failing department.</li>
-                    <li><strong>Quote:</strong> "Efficiency dictates we proceed according to the established plan."</li>
-                </ul>
-            </details>
-             <details class="npc-card">
-                <summary>🌟 Marius (40/M)</summary>
-                 <div>
-                    <span class="tag tag-purple">Archmage</span>
-                    <span class="tag">Lazy</span>
-                    <span class="tag">Genius</span>
-                </div>
-                <p>Tousled dark blonde hair, sleepy-looking blue eyes. Lazy, Genius, Irresponsible, Cynical. Archmage (8th Floor) & Former Tower Master.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Archmage, Former Tower Master.</li>
-                    <li><strong>Abilities:</strong> Archmage (8th Floor, Complex constructs, mana efficiency).</li>
-                    <li><strong>Animarium:</strong> Architect of the Aegis (Legend) - Designed Luminaris's magical defenses.</li>
-                    <li><strong>Quote:</strong> "Why work hard when you can work smart? And by smart, I mean getting someone else to do it."</li>
-                </ul>
-            </details>
-            <details class="npc-card">
-                <summary>🏰 Titus Agripa (58/M)</summary>
-                 <div>
-                    <span class="tag tag-blue">Margrave</span>
-                    <span class="tag">Elite Knight</span>
-                    <span class="tag">Jovial</span>
-                </div>
-                <p>Short grey hair, clear blue eyes. Jovial, Straightforward, Courageous, Loyal. Margrave of Album Ultima.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Margrave of Album Ultima.</li>
-                    <li><strong>Abilities:</strong> Elite Knight (Solid, reliable Aura for strength/durability).</li>
-                    <li><strong>Animarium:</strong> Winter's Shield (Tale) - Defended fortress through brutal siege.</li>
-                    <li><strong>Quote:</strong> "Fancy words don't stop an Utlander axe. Steel and guts do."</li>
-                </ul>
-            </details>
-             <details class="npc-card">
-                <summary>🏰 Livia Agripa (20/F)</summary>
-                <div>
-                    <span class="tag tag-blue">Lady (De Facto)</span>
-                    <span class="tag">Practical</span>
-                    <span class="tag">Resilient</span>
-                </div>
-                <p>Warm brown hair, kind hazel eyes. Gentle, Practical, Responsible, Resilient. De facto Lady of Album Ultima.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> De facto Lady of Album Ultima.</li>
-                    <li><strong>Abilities:</strong> Excellent practical skills (management, first aid).</li>
-                    <li><strong>Animarium:</strong> Hearth Keeper (Folktale) - Managed fortress household through harsh winters.</li>
-                    <li><strong>Quote:</strong> "Father, *another* feast? We must consider the winter stores."</li>
-                </ul>
-            </details>
-             <details class="npc-card">
-                <summary>🏰 Valeria Cornelia (25/F)</summary>
-                <div>
-                    <span class="tag tag-purple">Mage (5th Floor)</span>
-                    <span class="tag">Arrogant</span>
-                    <span class="tag">Clumsy (Practical)</span>
-                </div>
-                <p>Dark hair (severe bun), cold grey eyes. Arrogant, Prideful (Mage), Impatient, Easily Flustered. 5th Floor Mage at Album Ultima, Theorist Clumsy in Practice.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Mage (5th Floor) at Album Ultima.</li>
-                    <li><strong>Abilities:</strong> Mage (5th Floor, Strong theory, poor practical application).</li>
-                    <li><strong>Animarium:</strong> Precise Ward (Fairy Tale) - Designed complex ward under controlled conditions.</li>
-                    <li><strong>Quote:</strong> "My theoretical model is sound! The failure lies in this region's fundamentally flawed mana resonance!"</li>
-                </ul>
-            </details>
-            <details class="npc-card">
-                <summary>⚔️ Lucius Magna (62/M)</summary>
-                <div>
-                    <span class="tag tag-blue">Duke</span>
-                    <span class="tag tag-grey">Conservative</span>
-                    <span class="tag">Traditionalist</span>
-                </div>
-                <p>Neat grey hair, stern grey eyes. Conservative, Traditionalist, Stern, Authoritative, Xenophobic. Duke of Magna, Opposes Aurelia's reforms.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Duke of Magna.</li>
-                    <li><strong>Abilities:</strong> Political influence, wealth, military forces.</li>
-                    <li><strong>Animarium:</strong> Keeper of the Old Ways (Tale) - Lifelong dedication to upholding ancient laws/customs.</li>
-                    <li><strong>Quote:</strong> "Tradition is the bedrock upon which this Empire was built. To defy it is to invite chaos."</li>
-                </ul>
-            </details>
-             <details class="npc-card">
-                <summary>⚔️ Gaius Magna (31/M)</summary>
-                 <div>
-                    <span class="tag tag-blue">Heir</span>
-                    <span class="tag tag-red">Sadistic</span>
-                    <span class="tag">Arrogant</span>
-                </div>
-                <p>Dark hair, dark piercing eyes. Arrogant, Sadistic, Dominating, Cruel. Heir Apparent, Elite Knight (barely).</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Heir Apparent to Duchy of Magna.</li>
-                    <li><strong>Abilities:</strong> Elite Knight (Barely, raw aggression).</li>
-                    <li><strong>Animarium:</strong> Shadow of the Duke (Tale) - Believes status grants absolute authority.</li>
-                    <li><strong>Quote:</strong> "In *my* father's lands, *my* word is law. Question it, and suffer."</li>
-                </ul>
-            </details>
+             <div class="lang-en">
+                <h1>👤 Lumina NPC List</h1>
+                <details class="npc-card"><summary>👑 Aurelia Lumina Rex (17/F)</summary><div><span class="tag tag-red">Empress</span><span class="tag">Aura Master</span></div><p>First Empress, seeks merit-based reform. Decisive, Ambitious. <strong>Animarium:</strong> Rulebreaker (Epic).</p></details>
+                <details class="npc-card"><summary>👑 Fabius Valerius (26/M)</summary><div><span class="tag tag-blue">Advisor</span><span class="tag">Noble</span></div><p>Strategic Advisor, supports Aurelia. Analytical, Calm. <strong>Animarium:</strong> Architect of Victory (Fairy Tale).</p></details>
+                <details class="npc-card"><summary>🗡️ Cassian Valerius (48/M)</summary><div><span class="tag tag-grey">Commander</span><span class="tag">Al-Mizan</span></div><p>Luminous Knights Commander & Al-Mizan Overseer. Disciplined, Secretive. <strong>Animarium:</strong> Guardian of the Silent Truth (Epic).</p></details>
+                <details class="npc-card"><summary>🗡️ Seraphina Grata (23/F)</summary><div><span class="tag tag-red">Vice-Commander</span><span class="tag">Loyal</span></div><p>Vice-commander, symbol of reforms. Cheerful, Fierce. <strong>Animarium:</strong> Aurelia's Comet (Tale).</p></details>
+                <details class="npc-card"><summary>🗡️ Silas Tacitus (29/M)</summary><div><span class="tag">Knight</span><span class="tag tag-grey">Calculating</span></div><p>Rank-and-File Knight, hidden agenda. Guarded, Opportunistic. <strong>Animarium:</strong> Shadow Weaver (Folktale).</p></details>
+                <details class="npc-card"><summary>🗡️ Vibia Magna (24/F)</summary><div><span class="tag">Knight</span><span class="tag tag-grey">Kuudere</span></div><p>Highly Skilled Luminous Knight, Duke Magna's daughter. Stoic, Aloof. <strong>Animarium:</strong> Eye of the Storm (Tale).</p></details>
+                <details class="npc-card"><summary>🌟 Elara Mella (20/F)</summary><div><span class="tag tag-purple">Tower Master</span><span class="tag">Genius</span></div><p>Tower Master, reclusive mana theorist. Curious, Awkward. <strong>Animarium:</strong> Mana Resonance Tuner (Tale).</p></details>
+                <details class="npc-card"><summary>🌟 Livia Modesta (30/F)</summary><div><span class="tag tag-purple">Administrator</span><span class="tag">Efficient</span></div><p>Chief Administrator of Magisterium. Calm, Pragmatic. <strong>Animarium:</strong> Order from Chaos (Tale).</p></details>
+                <details class="npc-card"><summary>🌟 Marius (40/M)</summary><div><span class="tag tag-purple">Archmage</span><span class="tag">Lazy</span></div><p>Lazy Archmage & Former Tower Master. Genius, Irresponsible. <strong>Animarium:</strong> Architect of the Aegis (Legend).</p></details>
+                <details class="npc-card"><summary>🏰 Titus Agripa (58/M)</summary><div><span class="tag tag-blue">Margrave</span><span class="tag">Jovial</span></div><p>Margrave of Album Ultima. Straightforward, Courageous. <strong>Animarium:</strong> Winter's Shield (Tale).</p></details>
+                <details class="npc-card"><summary>🏰 Livia Agripa (20/F)</summary><div><span class="tag tag-blue">Lady (De Facto)</span><span class="tag">Practical</span></div><p>De facto Lady of Album Ultima. Gentle, Responsible. <strong>Animarium:</strong> Hearth Keeper (Folktale).</p></details>
+                <details class="npc-card"><summary>🏰 Valeria Cornelia (25/F)</summary><div><span class="tag tag-purple">Mage (5th)</span><span class="tag">Arrogant</span></div><p>Arrogant Mage at Album Ultima. Prideful, Clumsy. <strong>Animarium:</strong> Precise Ward (Fairy Tale).</p></details>
+                <details class="npc-card"><summary>⚔️ Lucius Magna (62/M)</summary><div><span class="tag tag-blue">Duke</span><span class="tag tag-grey">Conservative</span></div><p>Duke of Magna, opposes reforms. Stern, Xenophobic. <strong>Animarium:</strong> Keeper of the Old Ways (Tale).</p></details>
+                <details class="npc-card"><summary>⚔️ Gaius Magna (31/M)</summary><div><span class="tag tag-blue">Heir</span><span class="tag tag-red">Sadistic</span></div><p>Arrogant, cruel heir. Dominating. <strong>Animarium:</strong> Shadow of the Duke (Tale).</p></details>
             </div>
-
-        <div id="republic-npcs" class="section">
-            <h1>👤 The Timocratic Republic NPC List</h1>
-            <details class="npc-card">
-                <summary>🏛️ Theodoros Sideris (67/Chthonian)</summary>
-                 <div>
-                    <span class="tag tag-green">Prime Minister</span>
-                    <span class="tag tag-grey">Pragmatic</span>
-                    <span class="tag">Chthonian</span>
-                </div>
-                <p>Pragmatic, Business-like, Orderly. Prime Minister, Leader of Conservative Party, Prioritizes economic stability.</p>
-                <ul>
-                    <li><strong>Occupation:</strong> Prime Minister, Leader of Conservative Party (Syntiritikó Kómma).</li>
-                    <li><strong>Abilities:</strong> Political/economic power, skilled negotiator.</li>
-                    <li><strong>Animarium:</strong> Calculated Stability (Epic) - Salvaged industries during crisis via harsh measures, reinforcing economic focus.</li>
-                    <li><strong>Quote:</strong> "Set aside sentimental narratives. What matters are the figures on the ledger and predictable outcomes."</li>
-                </ul>
-            </details>
-             <details class="npc-card">
-                <summary>🏛️ Thrasa Leonidis (30/F/Pherian-Canid)</summary>
-                 <div>
-                    <span class="tag tag-green">Politician</span>
-                    <span class="tag tag-red">Hardliner</span>
-                    <span class="tag">Former Methodos</span>
-                </div>
-                <p>Determined, Bold, Unyielding, Aggressive. Conservative Party Hardline Leader, Former Beta Methodos.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Bouleutēs, Conservative Party Hardline Faction Leader.</li>
-                    <li><strong>Abilities:</strong> Peak Pherian condition, combat reflexes, strategic thinking, Pherian senses.</li>
-                    <li><strong>Animarium:</strong> Iron Bulwark (Epic) - Seized command and repelled enemies during border conflict.</li>
-                    <li><strong>Quote:</strong> "Stability built on fear is merely delayed collapse. True stability comes from strength."</li>
-                </ul>
-            </details>
-            <details class="npc-card">
-                <summary>🏛️ Filippos Nomikos (27/M/Pherian-Feline)</summary>
-                 <div>
-                    <span class="tag tag-green">Politician</span>
-                    <span class="tag tag-grey">Calculating</span>
-                    <span class="tag">Old Money</span>
-                </div>
-                <p>Calm, Calculating, Conservative. Represents Founders' Circle (Old Finance) within Conservative Party. Wary of revolution & rivals.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Bouleutēs, Representative of 'Founders' Circle'.</li>
-                    <li><strong>Abilities:</strong> Political/financial influence, analytical skill, negotiation.</li>
-                    <li><strong>Animarium:</strong> Calculated Order (Epic) - Prevented financial collapse via cunning manipulation, reinforcing belief in control.</li>
-                    <li><strong>Quote:</strong> "True power isn't shown loudly; it lies in the ability to quietly move the pieces on the board."</li>
-                </ul>
-            </details>
+            <div class="lang-ko">
+                <h1>👤 루미나 NPC 목록</h1>
+                 <details class="npc-card"><summary>👑 아우렐리아 루미나 렉스 (17/F)</summary><div><span class="tag tag-red">여황</span><span class="tag">오러 마스터</span></div><p>최초의 여황, 능력주의 개혁 추구. 결단력 있고 야심참. <strong>아니마리움:</strong> 룰브레이커 (서사급).</p></details>
+                 <details class="npc-card"><summary>👑 파비우스 발레리우스 (26/M)</summary><div><span class="tag tag-blue">고문</span><span class="tag">귀족</span></div><p>전략 고문, 아우렐리아 지지. 분석적이고 침착함. <strong>아니마리움:</strong> 승리의 설계자 (동화급).</p></details>
+                 <details class="npc-card"><summary>🗡️ 카시안 발레리우스 (48/M)</summary><div><span class="tag tag-grey">기사단장</span><span class="tag">알 미잔</span></div><p>루미너스 기사단장 겸 알 미잔 감독관. 규율 있고 비밀스러움. <strong>아니마리움:</strong> 침묵의 진실 수호자 (서사급).</p></details>
+                 <details class="npc-card"><summary>🗡️ 세라피나 그라타 (23/F)</summary><div><span class="tag tag-red">부단장</span><span class="tag">충성</span></div><p>부단장, 개혁의 상징. 쾌활하고 사나움. <strong>아니마리움:</strong> 아우렐리아의 혜성 (설화급).</p></details>
+                 <details class="npc-card"><summary>🗡️ 실라 타키투스 (29/M)</summary><div><span class="tag">기사</span><span class="tag tag-grey">계산적</span></div><p>평기사, 숨겨진 의도. 경계심 많고 기회주의적. <strong>아니마리움:</strong> 그림자 직조자 (민담급).</p></details>
+                 <details class="npc-card"><summary>🗡️ 비비아 마그나 (24/F)</summary><div><span class="tag">기사</span><span class="tag tag-grey">쿨데레</span></div><p>고도로 숙련된 루미너스 기사, 마그나 공작의 딸. 과묵하고 초연함. <strong>아니마리움:</strong> 폭풍의 눈 (설화급).</p></details>
+                 <details class="npc-card"><summary>🌟 엘라라 멜라 (20/F)</summary><div><span class="tag tag-purple">마탑주</span><span class="tag">천재</span></div><p>마탑주, 은둔형 마나 이론가. 호기심 많고 서투름. <strong>아니마리움:</strong> 마나 공명 조율사 (설화급).</p></details>
+                 <details class="npc-card"><summary>🌟 리비아 모데스타 (30/F)</summary><div><span class="tag tag-purple">행정관</span><span class="tag">효율</span></div><p>마기스테리움 수석 행정관. 침착하고 실용적. <strong>아니마리움:</strong> 혼돈 속의 질서 (설화급).</p></details>
+                 <details class="npc-card"><summary>🌟 마리우스 (40/M)</summary><div><span class="tag tag-purple">대마법사</span><span class="tag">게으름</span></div><p>게으른 대마법사 & 전 마탑주. 천재적이고 무책임함. <strong>아니마리움:</strong> 아이기스의 설계자 (전설급).</p></details>
+                 <details class="npc-card"><summary>🏰 티투스 아그리파 (58/M)</summary><div><span class="tag tag-blue">변경백</span><span class="tag">쾌활</span></div><p>알붐 울티마 변경백. 솔직하고 용감함. <strong>아니마리움:</strong> 겨울의 방패 (설화급).</p></details>
+                 <details class="npc-card"><summary>🏰 리비아 아그리파 (20/F)</summary><div><span class="tag tag-blue">영애 (사실상)</span><span class="tag">실용</span></div><p>알붐 울티마의 실질적 안주인. 온화하고 책임감 있음. <strong>아니마리움:</strong> 화로지기 (민담급).</p></details>
+                 <details class="npc-card"><summary>🏰 발레리아 코르넬리아 (25/F)</summary><div><span class="tag tag-purple">마법사 (5층)</span><span class="tag">오만</span></div><p>알붐 울티마의 오만한 마법사. 자존심 강하고 서투름. <strong>아니마리움:</strong> 정밀한 결계 (동화급).</p></details>
+                 <details class="npc-card"><summary>⚔️ 루키우스 마그나 (62/M)</summary><div><span class="tag tag-blue">공작</span><span class="tag tag-grey">보수</span></div><p>마그나 공작, 개혁 반대. 엄격하고 배타적. <strong>아니마리움:</strong> 옛 방식의 수호자 (설화급).</p></details>
+                 <details class="npc-card"><summary>⚔️ 카이우스 마그나 (31/M)</summary><div><span class="tag tag-blue">후계자</span><span class="tag tag-red">가학</span></div><p>오만하고 잔인한 후계자. 지배적. <strong>아니마리움:</strong> 공작의 그림자 (설화급).</p></details>
             </div>
-
-        <div id="global-npcs" class="section">
-            <h1>👤 Global NPC List</h1>
-            <details class="npc-card">
-                <summary>🐉 Aethel (Ancient/F)</summary>
-                 <div>
-                    <span class="tag tag-purple">Dragon</span>
-                    <span class="tag tag-grey">Al-Mizan Founder</span>
-                    <span class="tag">Cynical</span>
-                </div>
-                <p>Ancient silver-white dragon/pale girl form. Sarcastic, Cynical, Weary, Detached. Founder of Al-Mizan, Supreme Mage & Master Echo Weaver.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Founder/Guide of Al-Mizan.</li>
-                    <li><strong>Abilities:</strong> Supreme Mage, Master Echo Weaver (Artist). Draconic powers.</li>
-                    <li><strong>Animarium:</strong> Witness to the Shattered Sun (Myth) - Saw Al-Azuma's fall, became cynical.</li>
-                    <li><strong>Quote:</strong> "Oh, *another* world-ending threat? Groundbreaking. Just try not to vaporize yourselves *this* time, alright?"</li>
-                </ul>
-            </details>
-             <details class="npc-card">
-                <summary>Prima (Ancient/NA)</summary>
-                 <div>
-                    <span class="tag tag-blue">Ego Sword</span>
-                    <span class="tag tag-red">Arrogant</span>
-                    <span class="tag">Ancient</span>
-                </div>
-                <p>Golden-white light sprite (Ego form). Insufferable, Arrogant, Pedantic, Demanding. First Emperor's Ego Sword, grants Founder's Anima access.</p>
-                 <ul>
-                    <li><strong>Occupation:</strong> Legendary Artifact.</li>
-                    <li><strong>Abilities:</strong> Grants access to First Emperor's Anima; Sentient; Indestructible.</li>
-                    <li><strong>Animarium:</strong> Blade of the Founder (Legend) - Wielded during Empire's founding.</li>
-                    <li><strong>Quote:</strong> "FOOL! That stance is entirely wrong! The First Emperor would face his foes with *regal* bearing...!"</li>
-                </ul>
-            </details>
         </div>
         
-        <div id="power-systems" class="section">
-            <h1>⚡ Power Systems Overview</h1>
-            <p>This section provides quick links to the various power systems within the lore.</p>
-            
-            <details>
-                <summary>📖 Animarium</summary>
-                <p>The core system of soul archives. <a href="#animarium" onclick="showSection('animarium', document.querySelector('a[href=\\'#animarium\\']'))">Go to Animarium Details</a>.</p>
-            </details>
-
-            <details>
-                <summary>☀️ Lumina Empire</summary>
-                <ul>
-                    <li><strong>Aura (Knights):</strong> Pure energy from an 'Aura Core', circulated via 'Bodily Circuits', and shaped for combat. <a href="#lumina" onclick="showSection('lumina', document.querySelector('a[href=\\'#lumina\\']'))">Go to Lumina</a>.</li>
-                    <li><strong>Mana (Wizards):</strong> External energy perceived and manipulated via a 'Mana Sphere' and 'Spell Imprinting'. <a href="#lumina" onclick="showSection('lumina', document.querySelector('a[href=\\'#lumina\\']'))">Go to Lumina</a>.</li>
-                </ul>
-            </details>
-
-            <details>
-                <summary>⚙️ Timocratic Republic</summary>
-                 <ul>
-                    <li><strong>Logos Taxis (Mythos Engineers):</strong> Technology to artificially induce/optimize Animarium story acquisition. <a href="#republic" onclick="showSection('republic', document.querySelector('a[href=\\'#republic\\']'))">Go to Republic</a>.</li>
-                    <li><strong>Methodos:</strong> Agents with customized Animarium stories acquired via Logos Taxis. <a href="#republic" onclick="showSection('republic', document.querySelector('a[href=\\'#republic\\']'))">Go to Republic</a>.</li>
-                </ul>
-            </details>
-
-            <details>
-                <summary>🫱🏻‍🫲🏽 Manseru</summary>
-                 <ul>
-                    <li><strong>Tales Broker Abilities:</strong> 'Story Resonance' to sense and 'Soul Mediation' to transfer stories. <a href="#manseru" onclick="showSection('manseru', document.querySelector('a[href=\\'#manseru\\']'))">Go to Manseru</a>.</li>
-                    <li><strong>Qigong (Martial Artists):</strong> 'Internal Energy' cultivated in the 'Dantian', circulated via 'Meridians', used for martial arts. <a href="#manseru" onclick="showSection('manseru', document.querySelector('a[href=\\'#manseru\\']'))">Go to Manseru</a>.</li>
-                </ul>
-            </details>
-
-            <details>
-                <summary>❄️ Utlander</summary>
-                 <ul>
-                    <li><strong>Fighting Fury (Warriors):</strong> Explosive amplification of 'Blood Vigor' (life energy) triggered by emotions/will. <a href="#utlander" onclick="showSection('utlander', document.querySelector('a[href=\\'#utlander\\']'))">Go to Utlander</a>.</li>
-                    <li><strong>Shamanism:</strong> Communing with spirits (nature, ancestors) for healing, blessings, divination, and minor natural influence. <a href="#utlander" onclick="showSection('utlander', document.querySelector('a[href=\\'#utlander\\']'))">Go to Utlander</a>.</li>
-                </ul>
-            </details>
-
-            <details>
-                <summary>🏜️ Al Azuma</summary>
-                 <ul>
-                    <li><strong>Ruh (Gunslingers):</strong> 'Ink of the Soul' refined from mana, used to engrave bullets/objects with will and power. <a href="#al-azuma" onclick="showSection('al-azuma', document.querySelector('a[href=\\'#al-azuma\\']'))">Go to Al Azuma</a>.</li>
-                    <li><strong>Echo Weaving:</strong> Sensing and manipulating 'Echoes' (past reverberations) to create mirages and phenomena. <a href="#al-azuma" onclick="showSection('al-azuma', document.querySelector('a[href=\\'#al-azuma\\']'))">Go to Al Azuma</a>.</li>
-                </ul>
-            </details>
+        <div id="republic-npcs" class="section">
+             <div class="lang-en">
+                 <h1>👤 Republic NPC List</h1>
+                <details class="npc-card"><summary>🏛️ Theodoros Sideris (67/M/Chthonian)</summary><div><span class="tag tag-green">Prime Minister</span><span class="tag tag-grey">Pragmatic</span></div><p>PM, Conservative Leader. Business-like. <strong>Animarium:</strong> Calculated Stability (Epic).</p></details>
+                <details class="npc-card"><summary>🏛️ Thrasa Leonidis (30/F/Pherian-Canid)</summary><div><span class="tag tag-green">Politician</span><span class="tag tag-red">Hardliner</span></div><p>Conservative Hardliner, Former Methodos. Unyielding. <strong>Animarium:</strong> Iron Bulwark (Epic).</p></details>
+                <details class="npc-card"><summary>🏛️ Filippos Nomikos (27/M/Pherian-Feline)</summary><div><span class="tag tag-green">Politician</span><span class="tag tag-grey">Calculating</span></div><p>Conservative (Old Finance). Wary. <strong>Animarium:</strong> Calculated Order (Epic).</p></details>
+                <details class="npc-card"><summary>🏛️ Danae Chronis (45/F/Chthonian)</summary><div><span class="tag tag-green">Liberal Leader</span><span class="tag">Businesswoman</span></div><p>Liberal Leader, Watchmaker. Ambitious. <strong>Animarium:</strong> Precision Engine (Epic).</p></details>
+                <details class="npc-card"><summary>🏛️ Theano Vlastos (24/F/Pherian-Ursine)</summary><div><span class="tag tag-green">Liberal Orator</span><span class="tag">Idealistic</span></div><p>Liberal Orator, Idealistic. Passionate. <strong>Animarium:</strong> Voice of Conscience (Epic).</p></details>
+                <details class="npc-card"><summary>🔬 Kosmas Metaxas (43/M/Chthonian)</summary><div><span class="tag tag-green">Director (NDRI)</span><span class="tag tag-grey">Witty</span></div><p>Mythos Engineer, Director. Evasive. <strong>Animarium:</strong> The Gordian Algorithm (Epic).</p></details>
+                <details class="npc-card"><summary>🔬 Evandros Tekton (48/M/Chthonian)</summary><div><span class="tag tag-green">Researcher (NDRI)</span><span class="tag tag-grey">Perfectionist</span></div><p>Automaton Maker, created ego. Obsessive. <strong>Animarium:</strong> Galatea's Spark (Legend).</p></details>
+                <details class="npc-card"><summary>🔬 Chloe Petrakis (21/F/Pherian-Avian)</summary><div><span class="tag tag-green">Jr. Engineer</span><span class="tag">Naive</span></div><p>Junior Mythos Engineer. Enthusiastic. <strong>Animarium:</strong> First Cog's Turn (Folktale).</p></details>
+                <details class="npc-card"><summary>♟️ Konstantinos Metrios (42/M/Chthonian)</summary><div><span class="tag tag-green">Alpha Methodos</span><span class="tag tag-grey">Planner</span></div><p>Alpha Methodos, Planner. Meticulous. <strong>Animarium:</strong> The Flawless Blueprint (Epic).</p></details>
+                <details class="npc-card"><summary>♟️ Anya Tekton (2/F/Automaton)</summary><div><span class="tag tag-green">Beta Methodos</span><span class="tag tag-purple">Ego Automaton</span></div><p>Beta Methodos, Ego Automaton. Conflicted. <strong>Animarium:</strong> The Unwanted Spark (Tale/Epic).</p></details>
+                <details class="npc-card"><summary>♟️ Lyra Melania (28/F/Pherian-Vulpid)</summary><div><span class="tag tag-green">Beta Methodos</span><span class="tag tag-grey">Al-Mizan</span></div><p>Beta Methodos & Al-Mizan Agent. Manipulative. <strong>Animarium:</strong> Circe's Whisper (Tale).</p></details>
+                <details class="npc-card"><summary>♟️ Demos Karteros (22/M/Pherian-Mustelid)</summary><div><span class="tag tag-green">Gamma Methodos</span><span class="tag tag-grey">Survivalist</span></div><p>Gamma Methodos, Survivalist. Cynical. <strong>Animarium:</strong> Shadow of the Back Alleys (Folktale).</p></details>
+                <details class="npc-card"><summary>☕ Alexios Volanis (38/M/Chthonian)</summary><div><span class="tag tag-grey">Worker</span><span class="tag">Agitator</span></div><p>Worker, To Kafenio Leader. Grievance-filled. <strong>Animarium:</strong> Spark of the Furnace (Folktale).</p></details>
+                <details class="npc-card"><summary>☕ Nikos Boreas (31/M/Human)</summary><div><span class="tag tag-red">Revolutionary</span><span class="tag">Former Methodos</span></div><p>Revolutionary, Former Methodos. Charismatic. <strong>Animarium:</strong> Immortal Flame (Epic).</p></details>
+             </div>
+             <div class="lang-ko">
+                 <h1>👤 공화국 NPC 목록</h1>
+                <details class="npc-card"><summary>🏛️ 테오도로스 시데리스 (67/M/크토니안)</summary><div><span class="tag tag-green">총리</span><span class="tag tag-grey">실용</span></div><p>총리, 보수당 대표. 사업가적. <strong>아니마리움:</strong> 계산된 안정 (서사급).</p></details>
+                <details class="npc-card"><summary>🏛️ 트라사 레오니디스 (30/F/페리안-개과)</summary><div><span class="tag tag-green">정치인</span><span class="tag tag-red">강경파</span></div><p>보수당 강경파, 전 메소도스. 불굴의. <strong>아니마리움:</strong> 철의 보루 (서사급).</p></details>
+                <details class="npc-card"><summary>🏛️ 필리포스 노미코스 (27/M/페리안-고양이과)</summary><div><span class="tag tag-green">정치인</span><span class="tag tag-grey">계산적</span></div><p>보수당 (구 금융). 신중함. <strong>아니마리움:</strong> 계산된 질서 (서사급).</p></details>
+                <details class="npc-card"><summary>🏛️ 다나에 크로니스 (45/F/크토니안)</summary><div><span class="tag tag-green">자유당 대표</span><span class="tag">사업가</span></div><p>자유당 대표, 시계 제작자. 야심참. <strong>아니마리움:</strong> 정밀 엔진 (서사급).</p></details>
+                <details class="npc-card"><summary>🏛️ 테아노 블라스토스 (24/F/페리안-곰과)</summary><div><span class="tag tag-green">자유당 웅변가</span><span class="tag">이상주의</span></div><p>자유당 웅변가, 이상주의. 열정적. <strong>아니마리움:</strong> 양심의 목소리 (서사급).</p></details>
+                <details class="npc-card"><summary>🔬 코스마스 메탁사스 (43/M/크토니안)</summary><div><span class="tag tag-green">연구소 국장</span><span class="tag tag-grey">재치</span></div><p>뮈토스 엔지니어, 국장. 회피적. <strong>아니마리움:</strong> 고르디우스의 알고리즘 (서사급).</p></details>
+                <details class="npc-card"><summary>🔬 에반드로스 텍톤 (48/M/크토니안)</summary><div><span class="tag tag-green">연구원</span><span class="tag tag-grey">완벽주의</span></div><p>오토마톤 제작자, 자아 창조. 집착적. <strong>아니마리움:</strong> 갈라테아의 불꽃 (전설급).</p></details>
+                <details class="npc-card"><summary>🔬 클로이 페트라키스 (21/F/페리안-조류)</summary><div><span class="tag tag-green">주니어 엔지니어</span><span class="tag">순진</span></div><p>주니어 뮈토스 엔지니어. 열정적. <strong>아니마리움:</strong> 첫 톱니바퀴의 회전 (민담급).</p></details>
+                <details class="npc-card"><summary>♟️ 콘스탄티노스 메트리오스 (42/M/크토니안)</summary><div><span class="tag tag-green">알파 메소도스</span><span class="tag tag-grey">기획가</span></div><p>알파 메소도스, 기획가. 꼼꼼함. <strong>아니마리움:</strong> 완벽한 청사진 (서사급).</p></details>
+                <details class="npc-card"><summary>♟️ 아냐 텍톤 (2/F/오토마톤)</summary><div><span class="tag tag-green">베타 메소도스</span><span class="tag tag-purple">자아 오토마톤</span></div><p>베타 메소도스, 자아 오토마톤. 갈등. <strong>아니마리움:</strong> 원치 않는 불꽃 (설화/서사급).</p></details>
+                <details class="npc-card"><summary>♟️ 리라 멜라니아 (28/F/페리안-여우과)</summary><div><span class="tag tag-green">베타 메소도스</span><span class="tag tag-grey">알 미잔</span></div><p>베타 메소도스 & 알 미잔 요원. 조종적. <strong>아니마리움:</strong> 키르케의 속삭임 (설화급).</p></details>
+                <details class="npc-card"><summary>♟️ 데모스 카르테로스 (22/M/페리안-족제비과)</summary><div><span class="tag tag-green">감마 메소도스</span><span class="tag tag-grey">생존주의</span></div><p>감마 메소도스, 생존주의. 냉소적. <strong>아니마리움:</strong> 뒷골목의 그림자 (민담급).</p></details>
+                <details class="npc-card"><summary>☕ 알렉시오스 볼라니스 (38/M/크토니안)</summary><div><span class="tag tag-grey">노동자</span><span class="tag">선동가</span></div><p>노동자, 토 카페니오 리더. 불만 가득. <strong>아니마리움:</strong> 용광로의 불꽃 (민담급).</p></details>
+                <details class="npc-card"><summary>☕ 니코스 보레아스 (31/M/인간)</summary><div><span class="tag tag-red">혁명가</span><span class="tag">전 메소도스</span></div><p>혁명가, 전 메소도스. 카리스마. <strong>아니마리움:</strong> 불멸의 불꽃 (서사급).</p></details>
+             </div>
         </div>
 
+        <div id="global-npcs" class="section">
+             <div class="lang-en">
+                <h1>🌐 Global NPC List</h1>
+                 <details class="npc-card"><summary>🐉 Aethel (Ancient/F)</summary><div><span class="tag tag-purple">Dragon</span><span class="tag tag-grey">Al-Mizan Founder</span></div><p>Ancient silver-white dragon, founder of Al-Mizan. Sarcastic, Cynical, Weary. Supreme Mage & Master Echo Weaver. <strong>Animarium:</strong> Witness to the Shattered Sun (Myth).</p></details>
+                 <details class="npc-card"><summary>⚔️ Prima (Ancient/NA)</summary><div><span class="tag tag-blue">Ego Sword</span><span class="tag tag-red">Arrogant</span></div><p>First Emperor's Ego Sword. Insufferable, Pedantic, Demanding. <strong>Animarium:</strong> Blade of the Founder (Legend).</p></details>
+             </div>
+             <div class="lang-ko">
+                <h1>🌐 글로벌 NPC 목록</h1>
+                 <details class="npc-card"><summary>🐉 에델 (고대/F)</summary><div><span class="tag tag-purple">용</span><span class="tag tag-grey">알 미잔 창시자</span></div><p>고대의 은백색 용, 알 미잔 창시자. 빈정대고, 냉소적이며, 지쳐 있음. 최고 마법사 & 잔향사 거장. <strong>아니마리움:</strong> 부서진 태양의 목격자 (신화급).</p></details>
+                 <details class="npc-card"><summary>⚔️ 프리마 (고대/NA)</summary><div><span class="tag tag-blue">자아의 검</span><span class="tag tag-red">오만</span></div><p>초대 황제의 자아를 가진 검. 참을 수 없고, 현학적이며, 요구가 많음. <strong>아니마리움:</strong> 창시자의 검 (전설급).</p></details>
+             </div>
+        </div>
 
     </div>
 
     <script>
+        let currentLang = 'en';
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            var en_elements = document.querySelectorAll('.lang-en');
+            var ko_elements = document.querySelectorAll('.lang-ko');
+            var en_btn = document.getElementById('lang-en-btn');
+            var ko_btn = document.getElementById('lang-ko-btn');
+
+            if (lang === 'en') {
+                en_elements.forEach(function(el) { el.style.display = 'block'; });
+                ko_elements.forEach(function(el) { el.style.display = 'none'; });
+                en_btn.classList.add('active-lang');
+                ko_btn.classList.remove('active-lang');
+            } else {
+                en_elements.forEach(function(el) { el.style.display = 'none'; });
+                ko_elements.forEach(function(el) { el.style.display = 'block'; });
+                ko_btn.classList.add('active-lang');
+                en_btn.classList.remove('active-lang');
+            }
+        }
+
         function showSection(sectionId, element) {
-            // Hide all sections
             var sections = document.querySelectorAll('.section');
             sections.forEach(function(section) {
                 section.style.display = 'none';
                 section.classList.remove('active');
             });
 
-            // Show the selected section
             var activeSection = document.getElementById(sectionId);
             if (activeSection) {
                 activeSection.style.display = 'block';
                 activeSection.classList.add('active');
             }
             
-            // Update active link style
-             var links = document.querySelectorAll('#sidebar a');
-             links.forEach(function(link) {
-                 link.classList.remove('active');
-             });
+            var links = document.querySelectorAll('#sidebar a');
+            links.forEach(function(link) {
+                link.classList.remove('active');
+            });
              if(element) {
+                let current = element;
+                while(current && current.tagName !== 'LI') {
+                    current = current.parentElement;
+                }
+                if (current && current.parentElement && current.parentElement.previousElementSibling && current.parentElement.previousElementSibling.tagName === 'A') {
+                     current.parentElement.previousElementSibling.classList.add('active');
+                }
                 element.classList.add('active');
              }
 
-            // Scroll to the top of the content
+            // Ensure correct language is shown
+            switchLanguage(currentLang);
+
             document.getElementById('content').scrollTop = 0;
             window.scrollTo(0, 0);
         }
 
-        // Show the first section by default (optional)
          document.addEventListener("DOMContentLoaded", function() {
             showSection('animarium', document.querySelector('a[href="#animarium"]'));
+            switchLanguage('ko'); // Start with Korean
         });
         
-        // Ensure sidebar links work
         document.querySelectorAll('#sidebar a').forEach(link => {
             link.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
                 if (href && href.startsWith('#')) {
-                   e.preventDefault(); // Prevent default anchor jump
+                   e.preventDefault();
                    const sectionId = href.substring(1);
                    showSection(sectionId, this);
                 }
